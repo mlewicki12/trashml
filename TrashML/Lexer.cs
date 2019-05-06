@@ -1,5 +1,6 @@
 
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 
 namespace TrashML
@@ -45,13 +46,13 @@ namespace TrashML
             Keywords.Add("to", Token.TokenType.TO);
             Keywords.Add("end", Token.TokenType.END);
             Keywords.Add("print", Token.TokenType.PRINT);
-            Keywords.Add("player", Token.TokenType.PLAYER);
             Keywords.Add("false", Token.TokenType.FALSE);
             Keywords.Add("true", Token.TokenType.TRUE);
         }
 
         public class Token
         {
+            // TODO: organise this and make it look better
             public enum TokenType
             {
                 NUMBER,
@@ -80,13 +81,13 @@ namespace TrashML
                 DO,
                 END,
                 PRINT,
-                PLAYER,
                 DOT,
                 TO,
                 LET,
                 NEWLINE,
                 FALSE,
-                TRUE
+                TRUE,
+                DOTTED
             };
 
             public TokenType Type;
@@ -212,6 +213,14 @@ namespace TrashML
                     else addToken(Token.TokenType.BANG, "!");
 
                     break;
+                
+               // case '"':
+               //     string();
+               //     break;
+               // 
+               // case '#':
+               //     comment();
+               //     break;
 
                 default:
                     if (isDigit(c))
@@ -254,9 +263,16 @@ namespace TrashML
         void identifier()
         {
             var c = peek();
+            var dotted = false;
+            
             while (isAlphaNumeric(c))
             {
                 advance();
+                if (c == '.')
+                {
+                    dotted = true;
+                }
+                
                 c = peek();
             }
 
@@ -267,7 +283,10 @@ namespace TrashML
             }
             else
             {
-                addToken(Token.TokenType.IDENTIFIER, text);
+                if (dotted)
+                {
+                    addToken(Token.TokenType.DOTTED, text);
+                } else addToken(Token.TokenType.IDENTIFIER, text);
             }
         }
 
@@ -293,7 +312,7 @@ namespace TrashML
 
         bool isAlpha(char c)
         {
-            return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c == '_'));
+            return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c == '_') | (c == '.'));
         }
 
         bool isAlphaNumeric(char c)

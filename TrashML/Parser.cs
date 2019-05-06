@@ -70,11 +70,11 @@ namespace TrashML
                 if (match(Lexer.Token.TokenType.DO)) return new Stmt.Block(block());
                 if (match(Lexer.Token.TokenType.LET)) return assignment();
                 if (match(Lexer.Token.TokenType.REPEAT)) return repeat();
-                if (match(Lexer.Token.TokenType.PLAYER)) return dotted();
+                // implement dotted expressions
                 if (match(Lexer.Token.TokenType.IF)) return ifstmt();
                 if (match(Lexer.Token.TokenType.MACRO)) return macro();
                 if (match(Lexer.Token.TokenType.PRINT)) return print();
-                if (match(Lexer.Token.TokenType.NEWLINE)) return null; // kill any newlines
+                if (match(Lexer.Token.TokenType.NEWLINE)) return statement(); // kill any newlines
 
                 return new Stmt.Expression(condition());
             }
@@ -151,25 +151,7 @@ namespace TrashML
 
         Stmt dotted()
         {
-            if (match(Lexer.Token.TokenType.DOT))
-            {
-                if (match(Lexer.Token.TokenType.IDENTIFIER))
-                {
-                    var operation = previous();
-
-                    if (match(Lexer.Token.TokenType.LEFT_PAREN))
-                    {
-                        var right = arguments();
-                        return new Stmt.Dotted(operation, right);
-                    }
-
-                    throw new ParseError("Expected arguments after dotted call");
-                }
-
-                throw new ParseError("Expected identifier in dotted call");
-            }
-
-            throw new ParseError("Expected '.' after 'Player'");
+            // you weren't pretty enough
         }
 
         Stmt ifstmt()
