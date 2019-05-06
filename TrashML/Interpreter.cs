@@ -79,6 +79,18 @@ namespace TrashML
                 }
             }
 
+            if (left is bool && right is bool)
+            {
+                switch (expr.Operator.Type)
+                {
+                    case Lexer.Token.TokenType.AND:
+                        return (bool) left && (bool) right;
+                    
+                    case Lexer.Token.TokenType.OR:
+                        return (bool) left || (bool) right;
+                }
+            }
+
             throw new RuntimeError($"Unknown operator '{expr.Operator.Literal}'");
         }
 

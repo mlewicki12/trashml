@@ -48,6 +48,8 @@ namespace TrashML
             Keywords.Add("print", Token.TokenType.PRINT);
             Keywords.Add("false", Token.TokenType.FALSE);
             Keywords.Add("true", Token.TokenType.TRUE);
+            Keywords.Add("and", Token.TokenType.AND);
+            Keywords.Add("or", Token.TokenType.OR);
         }
 
         public class Token
@@ -88,8 +90,10 @@ namespace TrashML
                 FALSE,
                 TRUE,
                 DOTTED,
-                STRING
-            };
+                STRING,
+                AND,
+                OR
+            }
 
             public TokenType Type;
             public string Literal;

@@ -109,13 +109,11 @@ namespace TrashML
         {
             public readonly Lexer.Token Operand;
             public readonly Lexer.Token Operation;
-            public readonly Expr Arguments;
 
-            public Dotted(Lexer.Token operand, Lexer.Token operation, Expr arg)
+            public Dotted(Lexer.Token operand, Lexer.Token operation)
             {
                 Operand = operand;
                 Operation = operation;
-                Arguments = arg;
             }
 
             public override R Accept<R>(IVisitor<R> visitor)

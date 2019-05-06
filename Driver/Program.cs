@@ -20,7 +20,7 @@ namespace TrashML.Driver
                     Console.WriteLine(text);
                     error = true;
                 }
-            } else text = "player.move";
+            } else text = "let x = 5\nprint x";
 
             if (!error)
             {

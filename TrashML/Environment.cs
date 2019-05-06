@@ -6,11 +6,11 @@ namespace TrashML
 {
     public class Environment
     {
-        public Environment Enclosing;
-        public string Name;
+        public readonly Environment Enclosing;
+        public readonly string Name;
         
-        private Dictionary<string, object> macros = new Dictionary<string, object>();
-        private Dictionary<string, object> values = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> _macros = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> _values = new Dictionary<string, object>();
 
         public Environment(string name, Environment enclosing)
         {
@@ -20,14 +20,14 @@ namespace TrashML
 
         public object Get(Lexer.Token name)
         {
-            if (values.ContainsKey(name.Literal))
+            if (_values.ContainsKey(name.Literal))
             {
-                return values[name.Literal];
+                return _values[name.Literal];
             }
 
-            if (macros.ContainsKey(name.Literal))
+            if (_macros.ContainsKey(name.Literal))
             {
-                return macros[name.Literal];
+                return _macros[name.Literal];
             }
 
             if (Enclosing != null) return Enclosing.Get(name);
@@ -37,22 +37,22 @@ namespace TrashML
 
         public bool Contains(Lexer.Token name)
         {
-            return values.ContainsKey(name.Literal) || macros.ContainsKey(name.Literal);
+            return _values.ContainsKey(name.Literal) || _macros.ContainsKey(name.Literal);
         }
 
         public void Define(Lexer.Token name, object value)
         {
             if (value is Stmt.Macro)
             {
-                if (!macros.ContainsKey(name.Literal))
+                if (!_macros.ContainsKey(name.Literal))
                 {
-                    macros.Add(name.Literal, value);
+                    _macros.Add(name.Literal, value);
                 }
-                else values[name.Literal] = value;
-            } else if (!values.ContainsKey(name.Literal))
+                else _values[name.Literal] = value;
+            } else if (!_values.ContainsKey(name.Literal))
             {
-                values.Add(name.Literal, value);
-            } else values[name.Literal] = value;
+                _values.Add(name.Literal, value);
+            } else _values[name.Literal] = value;
         }
     }
 }

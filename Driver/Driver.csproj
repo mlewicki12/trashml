@@ -48,7 +48,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="macros.tm" />
+    <Content Include="TestFiles\booleans.tm" />
+    <Content Include="TestFiles\macros.tm" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

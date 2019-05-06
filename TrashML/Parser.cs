@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace TrashML
 {
@@ -61,13 +62,13 @@ namespace TrashML
                 if (match(Lexer.Token.TokenType.DO)) return new Stmt.Block(block());
                 if (match(Lexer.Token.TokenType.LET)) return assignment();
                 if (match(Lexer.Token.TokenType.REPEAT)) return repeat();
-                // implement dotted expressions
+                if (match(Lexer.Token.TokenType.DOTTED)) return dotted();
                 if (match(Lexer.Token.TokenType.IF)) return ifstmt();
                 if (match(Lexer.Token.TokenType.MACRO)) return macro();
                 if (match(Lexer.Token.TokenType.PRINT)) return print();
                 if (match(Lexer.Token.TokenType.NEWLINE)) return null; // kill any newlines
 
-                return new Stmt.Expression(condition());
+                return new Stmt.Expression(comparison());
             }
             catch (ParseError e)
             {
@@ -108,7 +109,7 @@ namespace TrashML
             Expr initialiser = null;
             if (match(Lexer.Token.TokenType.EQUAL))
             {
-                initialiser = condition();
+                initialiser = comparison();
             }
 
             consume("Expected new line after variable declaration", Lexer.Token.TokenType.NEWLINE,
@@ -118,14 +119,14 @@ namespace TrashML
 
         Stmt repeat()
         {
-            Expr left = condition();
+            Expr left = comparison();
             Expr right = null;
 
             // hey we've got a high low loop
             // also im exhausted
             if (match(Lexer.Token.TokenType.COLON, Lexer.Token.TokenType.TO))
             {
-                right = condition();
+                right = comparison();
             }
 
             Stmt.Block blk = null;
@@ -143,12 +144,14 @@ namespace TrashML
         Stmt dotted()
         {
             // you weren't pretty enough
-            return null;
+            var value = previous().Literal.Split('.');
+            return new Stmt.Dotted(new Lexer.Token{Type = Lexer.Token.TokenType.IDENTIFIER, Literal = value[0]},
+                new Lexer.Token{Type = Lexer.Token.TokenType.IDENTIFIER, Literal = value[1]});
         }
 
         Stmt ifstmt()
         {
-            var cond = condition();
+            var cond = comparison();
 
             consume("Expected 'do' after 'if'", Lexer.Token.TokenType.DO);
             var blk = block();
@@ -175,13 +178,27 @@ namespace TrashML
 
         Stmt print()
         {
-            var expr = condition();
+            var expr = comparison();
 
 
             consume("Expected new line after variable declaration", Lexer.Token.TokenType.NEWLINE,
                 Lexer.Token.TokenType.EOF);
             
             return new Stmt.Print(expr);
+        }
+
+        Expr comparison()
+        {
+            Expr left = condition();
+
+            if (match(Lexer.Token.TokenType.AND, Lexer.Token.TokenType.OR))
+            {
+                Lexer.Token op = previous();
+                Expr right = condition();
+                return new Expr.Binary(left, op, right);
+            }
+
+            return left;
         }
 
         Expr condition()
@@ -202,7 +219,7 @@ namespace TrashML
 
         Expr grouping()
         {
-            Expr expr = condition();
+            Expr expr = comparison();
 
             consume("Expected ')' after '('", Lexer.Token.TokenType.RIGHT_PAREN);
             return new Expr.Grouping(expr);
