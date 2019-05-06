@@ -75,7 +75,6 @@ namespace TrashML
                 COLON,
                 IF,
                 ELSE,
-                HASH,
                 MACRO,
                 EOF,
                 DO,
@@ -160,10 +159,6 @@ namespace TrashML
                     addToken(Token.TokenType.DIVIDE, "/");
                     break;
 
-                case '#':
-                    addToken(Token.TokenType.HASH, "#");
-                    break;
-
                 case ':':
                     addToken(Token.TokenType.COLON, ":");
                     break;
@@ -218,9 +213,9 @@ namespace TrashML
                //     string();
                //     break;
                // 
-               // case '#':
-               //     comment();
-               //     break;
+                case '#':
+                    comment();
+                    break;
 
                 default:
                     if (isDigit(c))
@@ -287,6 +282,13 @@ namespace TrashML
                 {
                     addToken(Token.TokenType.DOTTED, text);
                 } else addToken(Token.TokenType.IDENTIFIER, text);
+            }
+        }
+
+        void comment()
+        {
+            while (!isAtEnd() && advance() != '\n')
+            {
             }
         }
 

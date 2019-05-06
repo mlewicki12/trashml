@@ -7,17 +7,15 @@ namespace TrashML
     public class Environment
     {
         public Environment Enclosing;
+        public string Name;
         
         private Dictionary<string, object> macros = new Dictionary<string, object>();
         private Dictionary<string, object> values = new Dictionary<string, object>();
 
-        public Environment() : this(null)
+        public Environment(string name, Environment enclosing)
         {
-        }
-
-        public Environment(Environment enclosing)
-        {
-            this.Enclosing = enclosing;
+            Enclosing = enclosing;
+            Name = name;
         }
 
         public object Get(Lexer.Token name)

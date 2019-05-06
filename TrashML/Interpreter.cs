@@ -19,7 +19,7 @@ namespace TrashML
 
         public Interpreter()
         {
-            IntEnvironment = new Environment();
+            IntEnvironment = new Environment("TML Interpreter", null);
             Errors = new List<RuntimeError>();
         }
 
@@ -125,7 +125,8 @@ namespace TrashML
 
             if (value is Stmt.Macro) // if it's a macro, run it as a macro
             {
-                executeBlock((value as Stmt.Macro).Body.Statements, new Environment(IntEnvironment));
+                var macro = value as Stmt.Macro;
+                executeBlock(macro.Body.Statements, new Environment(macro.Name.Literal, IntEnvironment));
                 return true;
             }
 
@@ -139,7 +140,7 @@ namespace TrashML
 
         public string VisitBlockStmt(Stmt.Block stmt)
         {
-            executeBlock(stmt.Statements, new Environment(IntEnvironment));
+            executeBlock(stmt.Statements, new Environment(IntEnvironment.Name + " Block", IntEnvironment));
             return "";
         }
 

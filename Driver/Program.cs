@@ -66,10 +66,11 @@ namespace TrashML.Driver
 
         static void printErrors<T>(string msg, List<T> errors) where T : Exception
         {
+            // TODO: make errors more informative
             Console.WriteLine(msg);
             foreach(var err in errors)
             {
-                Console.WriteLine(err);
+                Console.WriteLine(err + "\n");
             }
         }
     }

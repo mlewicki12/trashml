@@ -1,3 +1,4 @@
+# macro test
 macro test do
     if x > 6 do
         print x
@@ -9,6 +10,7 @@ end
 let x = 5
 test
 
+# what about this one
 let x = 7
 test
 
@@ -20,3 +22,4 @@ end
 
 let x = 5
 printX
+# does this comment work?

@@ -16,14 +16,11 @@ namespace TrashML
         public List<Lexer.Token> Tokens;
         public List<ParseError> Errors;
 
-        private int _current = 0;
-
-        public Parser() : this(new List<Lexer.Token>())
-        {
-        }
+        private int _current;
 
         public Parser(List<Lexer.Token> tokens)
         {
+            _current = 0;
             Tokens = tokens;
             Errors = new List<ParseError>();
         }
@@ -36,23 +33,17 @@ namespace TrashML
 
         public List<Stmt> Parse()
         {
+            Errors = new List<ParseError>();
+            
             var statements = new List<Stmt>();
 
-            try
+            while (!isAtEnd())
             {
-                while (!isAtEnd())
+                Stmt stmt = statement();
+                if (stmt != null)
                 {
-                    Stmt stmt = statement();
-                    if (stmt != null)
-                    {
-                        statements.Add(stmt);
-                    }
+                    statements.Add(stmt);
                 }
-
-            }
-            catch (ParseError e)
-            {
-                Errors.Add(e);
             }
 
             return statements;
@@ -74,7 +65,7 @@ namespace TrashML
                 if (match(Lexer.Token.TokenType.IF)) return ifstmt();
                 if (match(Lexer.Token.TokenType.MACRO)) return macro();
                 if (match(Lexer.Token.TokenType.PRINT)) return print();
-                if (match(Lexer.Token.TokenType.NEWLINE)) return statement(); // kill any newlines
+                if (match(Lexer.Token.TokenType.NEWLINE)) return null; // kill any newlines
 
                 return new Stmt.Expression(condition());
             }
@@ -185,6 +176,10 @@ namespace TrashML
         Stmt print()
         {
             var expr = condition();
+
+
+            consume("Expected new line after variable declaration", Lexer.Token.TokenType.NEWLINE,
+                Lexer.Token.TokenType.EOF);
             
             return new Stmt.Print(expr);
         }
