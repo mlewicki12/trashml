@@ -70,6 +70,7 @@ namespace TrashML
                 GREATER,
                 LEFT_PAREN,
                 RIGHT_PAREN,
+                COMMA,
 
                 REPEAT,
                 COLON,
@@ -86,7 +87,8 @@ namespace TrashML
                 NEWLINE,
                 FALSE,
                 TRUE,
-                DOTTED
+                DOTTED,
+                STRING
             };
 
             public TokenType Type;
@@ -166,6 +168,10 @@ namespace TrashML
                 case '.':
                     addToken(Token.TokenType.DOT, ".");
                     break;
+                
+                case ',':
+                    addToken(Token.TokenType.COMMA, ",");
+                    break;
 
                 case '=':
                     addToken(Token.TokenType.EQUAL, "=");
@@ -209,10 +215,10 @@ namespace TrashML
 
                     break;
                 
-               // case '"':
-               //     string();
-               //     break;
-               // 
+                case '"':
+                    strng();
+                    break;
+                
                 case '#':
                     comment();
                     break;
@@ -283,6 +289,23 @@ namespace TrashML
                     addToken(Token.TokenType.DOTTED, text);
                 } else addToken(Token.TokenType.IDENTIFIER, text);
             }
+        }
+        
+        void strng()
+        {
+            var c = advance();
+            while (c != '"')
+            {
+                if (isAtEnd())
+                {
+                    throw new ScanError("Expected ending '\"' when defining string value");
+                }
+
+                c = advance();
+            }
+            
+            string text = _source.Substring(_start + 1, _current - _start - 2);
+            addToken(Token.TokenType.STRING, text);
         }
 
         void comment()

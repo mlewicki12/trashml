@@ -236,6 +236,7 @@ namespace TrashML
 
             if (match(Lexer.Token.TokenType.NUMBER)) return new Expr.Literal(int.Parse(previous().Literal));
             if (match(Lexer.Token.TokenType.IDENTIFIER)) return new Expr.Variable(previous());
+            if (match( Lexer.Token.TokenType.STRING)) return new Expr.Literal(previous().Literal);
 
             throw new ParseError("Expecting expression");
         }

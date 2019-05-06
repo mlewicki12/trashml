@@ -43,37 +43,40 @@ namespace TrashML
             var left = evaluate(expr.Left);
             var right = evaluate(expr.Right);
 
-            switch (expr.Operator.Type)
+            if (left is int && right is int)
             {
-                case Lexer.Token.TokenType.PLUS:
-                    return (int) left + (int) right;
+                switch (expr.Operator.Type)
+                {
+                    case Lexer.Token.TokenType.PLUS:
+                        return (int) left + (int) right;
 
-                case Lexer.Token.TokenType.MINUS:
-                    return (int) left - (int) right;
+                    case Lexer.Token.TokenType.MINUS:
+                        return (int) left - (int) right;
 
-                case Lexer.Token.TokenType.MULTIPLY:
-                    return (int) left * (int) right;
+                    case Lexer.Token.TokenType.MULTIPLY:
+                        return (int) left * (int) right;
 
-                case Lexer.Token.TokenType.DIVIDE:
-                    return (int) left / (int) right;
+                    case Lexer.Token.TokenType.DIVIDE:
+                        return (int) left / (int) right;
 
-                case Lexer.Token.TokenType.EQUAL:
-                    return (int) left == (int) right;
+                    case Lexer.Token.TokenType.EQUAL:
+                        return (int) left == (int) right;
 
-                case Lexer.Token.TokenType.BANG_EQUAL:
-                    return (int) left != (int) right;
+                    case Lexer.Token.TokenType.BANG_EQUAL:
+                        return (int) left != (int) right;
 
-                case Lexer.Token.TokenType.LESS:
-                    return (int) left < (int) right;
+                    case Lexer.Token.TokenType.LESS:
+                        return (int) left < (int) right;
 
-                case Lexer.Token.TokenType.LESS_EQUAL:
-                    return (int) left <= (int) right;
+                    case Lexer.Token.TokenType.LESS_EQUAL:
+                        return (int) left <= (int) right;
 
-                case Lexer.Token.TokenType.GREATER:
-                    return (int) left > (int) right;
+                    case Lexer.Token.TokenType.GREATER:
+                        return (int) left > (int) right;
 
-                case Lexer.Token.TokenType.GREATER_EQUAL:
-                    return (int) left >= (int) right;
+                    case Lexer.Token.TokenType.GREATER_EQUAL:
+                        return (int) left >= (int) right;
+                }
             }
 
             throw new RuntimeError($"Unknown operator '{expr.Operator.Literal}'");

@@ -22,4 +22,10 @@ end
 
 let x = 5
 printX
+
+let y = "test"
+print y
+
+let z = 1234567890
+print z
 # does this comment work?
