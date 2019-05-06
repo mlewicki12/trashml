@@ -152,6 +152,7 @@ namespace TrashML
         Stmt dotted()
         {
             // you weren't pretty enough
+            return null;
         }
 
         Stmt ifstmt()
