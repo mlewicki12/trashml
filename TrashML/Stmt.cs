@@ -5,11 +5,11 @@ namespace TrashML
 {
     public abstract class Stmt
     {
-        public interface Visitor<R>
+        public interface IVisitor<R>
         {
             R VisitBlockStmt(Block stmt);
             R VisitExpressionStmt(Expression stmt);
-            R VisitAssignStmt(Assign stmt);
+            R VisitLetStmt(Assign stmt);
             R VisitPrintStmt(Print stmt);
             R VisitRepeatStmt(Repeat stmt);
             R VisitDottedStmt(Dotted stmt);
@@ -19,14 +19,14 @@ namespace TrashML
 
         public class Block : Stmt
         {
-            public List<Stmt> Statements;
+            public readonly List<Stmt> Statements;
 
             public Block(List<Stmt> statements)
             {
-                this.Statements = statements;
+                Statements = statements;
             }
 
-            public override R Accept<R>(Visitor<R> visitor)
+            public override R Accept<R>(IVisitor<R> visitor)
             {
                 return visitor.VisitBlockStmt(this);
             }
@@ -34,14 +34,14 @@ namespace TrashML
 
         public class Expression : Stmt
         {
-            public Expr InnerExpression;
+            public readonly Expr InnerExpression;
 
             public Expression(Expr expression)
             {
-                this.InnerExpression = expression;
+                InnerExpression = expression;
             }
 
-            public override R Accept<R>(Visitor<R> visitor)
+            public override R Accept<R>(IVisitor<R> visitor)
             {
                 return visitor.VisitExpressionStmt(this);
             }
@@ -49,31 +49,31 @@ namespace TrashML
 
         public class Assign : Stmt
         {
-            public Lexer.Token Name;
-            public Expr Initialiser;
+            public readonly Lexer.Token Name;
+            public readonly Expr Initialiser;
 
             public Assign(Lexer.Token name, Expr initializer)
             {
-                this.Name = name;
-                this.Initialiser = initializer;
+                Name = name;
+                Initialiser = initializer;
             }
 
-            public override R Accept<R>(Visitor<R> visitor)
+            public override R Accept<R>(IVisitor<R> visitor)
             {
-                return visitor.VisitAssignStmt(this);
+                return visitor.VisitLetStmt(this);
             }
         }
 
         public class Print : Stmt
         {
-            public Expr Expression;
+            public readonly Expr Expression;
 
             public Print(Expr expr)
             {
-                this.Expression = expr;
+                Expression = expr;
             }
 
-            public override R Accept<R>(Visitor<R> visitor)
+            public override R Accept<R>(IVisitor<R> visitor)
             {
                 return visitor.VisitPrintStmt(this);
             }
@@ -81,25 +81,25 @@ namespace TrashML
 
         public class Repeat : Stmt
         {
-            public Expr LowValue;
-            public Expr HighValue;
-            public Expr Condition;
-            public Stmt.Block Block;
+            public readonly Expr LowValue;
+            public readonly Expr HighValue;
+            public readonly Expr Condition;
+            public readonly Block Block;
 
             public Repeat(Expr cond, Stmt.Block bl)
             {
-                this.Condition = cond;
-                this.Block = bl;
+                Condition = cond;
+                Block = bl;
             }
 
             public Repeat(Expr lv, Expr hv, Stmt.Block bl)
             {
-                this.LowValue = lv;
-                this.HighValue = hv;
-                this.Block = bl;
+                LowValue = lv;
+                HighValue = hv;
+                Block = bl;
             }
 
-            public override R Accept<R>(Visitor<R> visitor)
+            public override R Accept<R>(IVisitor<R> visitor)
             {
                 return visitor.VisitRepeatStmt(this);
             }
@@ -107,16 +107,16 @@ namespace TrashML
 
         public class Dotted : Stmt
         {
-            public Lexer.Token Operation;
-            public Expr Arguments;
+            public readonly Lexer.Token Operation;
+            public readonly Expr Arguments;
 
             public Dotted(Lexer.Token op, Expr arg)
             {
-                this.Operation = op;
-                this.Arguments = arg;
+                Operation = op;
+                Arguments = arg;
             }
 
-            public override R Accept<R>(Visitor<R> visitor)
+            public override R Accept<R>(IVisitor<R> visitor)
             {
                 return visitor.VisitDottedStmt(this);
             }
@@ -124,18 +124,18 @@ namespace TrashML
 
         public class If : Stmt
         {
-            public Expr Condition;
-            public Stmt WhenTrue;
-            public Stmt WhenFalse;
+            public readonly Expr Condition;
+            public readonly Stmt WhenTrue;
+            public readonly Stmt WhenFalse;
 
             public If(Expr cond, Stmt tr, Stmt fl)
             {
-                this.Condition = cond;
-                this.WhenTrue = tr;
-                this.WhenFalse = fl;
+                Condition = cond;
+                WhenTrue = tr;
+                WhenFalse = fl;
             }
 
-            public override R Accept<R>(Visitor<R> visitor)
+            public override R Accept<R>(IVisitor<R> visitor)
             {
                 return visitor.VisitIfStmt(this);
             }
@@ -144,21 +144,21 @@ namespace TrashML
 
         public class Macro : Stmt
         {
-            public Lexer.Token Name;
-            public Stmt.Block Body;
+            public readonly Lexer.Token Name;
+            public readonly Block Body;
 
             public Macro(Lexer.Token name, Stmt.Block body)
             {
-                this.Name = name;
-                this.Body = body;
+                Name = name;
+                Body = body;
             }
 
-            public override R Accept<R>(Visitor<R> visitor)
+            public override R Accept<R>(IVisitor<R> visitor)
             {
                 return visitor.VisitMacroStmt(this);
             }
         }
 
-        public abstract R Accept<R>(Visitor<R> visitor);
+        public abstract R Accept<R>(IVisitor<R> visitor);
     }
 }

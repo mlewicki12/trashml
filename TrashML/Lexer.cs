@@ -16,22 +16,26 @@ namespace TrashML
 
         private Dictionary<string, Token.TokenType> Keywords;
 
-        public string Source { get; set; }
-        public int Start;
-        public int Current;
+        private string _source;
+        private int _start;
+        private int _current;
+        
         public List<Token> Tokens;
+        public List<ScanError> Errors;
 
         public Lexer(string expr)
         {
-            Source = expr;
+            _source = expr;
 
-            Start = 0;
-            Current = 0;
+            _start = 0;
+            _current = 0;
 
             Tokens = new List<Token>();
+            Errors = new List<ScanError>();
 
             // add keywords
             Keywords = new Dictionary<string, Token.TokenType>();
+            
             Keywords.Add("repeat", Token.TokenType.REPEAT);
             Keywords.Add("let", Token.TokenType.LET);
             Keywords.Add("if", Token.TokenType.IF);
@@ -86,7 +90,6 @@ namespace TrashML
             };
 
             public TokenType Type;
-            public System.Object Value;
             public string Literal;
 
             public override string ToString()
@@ -98,13 +101,19 @@ namespace TrashML
         public List<Token> Scan()
         {
             Tokens = new List<Token>();
-            Start = 0;
-            Current = 0;
+            _start = 0;
+            _current = 0;
 
             while (!isAtEnd())
             {
-                Start = Current;
-                scanToken();
+                try
+                {
+                    _start = _current;
+                    scanToken();
+                } catch (ScanError e)
+                {
+                    Errors.Add(e);
+                }
             }
 
             addToken(Token.TokenType.EOF, "");
@@ -222,9 +231,14 @@ namespace TrashML
             }
         }
 
-        void addToken(Token.TokenType toAdd, string lit, System.Object val = null)
+        public bool Error()
         {
-            Tokens.Add(new Token {Type = toAdd, Value = val, Literal = lit});
+            return Errors.Count != 0;
+        }
+
+        void addToken(Token.TokenType toAdd, string lit)
+        {
+            Tokens.Add(new Token {Type = toAdd, Literal = lit});
         }
 
         void number()
@@ -234,7 +248,7 @@ namespace TrashML
                 advance();
             }
 
-            addToken(Token.TokenType.NUMBER, Source.Substring(Start, Current - Start));
+            addToken(Token.TokenType.NUMBER, _source.Substring(_start, _current - _start));
         }
 
         void identifier()
@@ -246,7 +260,7 @@ namespace TrashML
                 c = peek();
             }
 
-            string text = Source.Substring(Start, Current - Start);
+            string text = _source.Substring(_start, _current - _start);
             if (Keywords.ContainsKey(text))
             {
                 addToken(Keywords[text], text);
@@ -259,7 +273,7 @@ namespace TrashML
 
         char advance()
         {
-            return Source[Current++];
+            return _source[_current++];
         }
 
         char peek()
@@ -269,7 +283,7 @@ namespace TrashML
                 return '\0';
             }
 
-            return Source[Current];
+            return _source[_current];
         }
 
         bool isDigit(char c)
@@ -289,7 +303,7 @@ namespace TrashML
 
         bool isAtEnd()
         {
-            return Current >= Source.Length;
+            return _current >= _source.Length;
         }
     }
 }

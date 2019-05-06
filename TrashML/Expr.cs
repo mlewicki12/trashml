@@ -3,7 +3,7 @@ namespace TrashML
 {
     public abstract class Expr
     {
-        public interface Visitor<R>
+        public interface IVisitor<R>
         {
             R VisitBinaryExpr(Binary expr);
             R VisitGroupingExpr(Grouping expr);
@@ -14,18 +14,18 @@ namespace TrashML
 
         public class Binary : Expr
         {
-            public Expr Left;
-            public Lexer.Token Operator;
-            public Expr Right;
+            public readonly Expr Left;
+            public readonly Lexer.Token Operator;
+            public readonly Expr Right;
 
             public Binary(Expr left, Lexer.Token opr, Expr right)
             {
-                this.Left = left;
-                this.Operator = opr;
-                this.Right = right;
+                Left = left;
+                Operator = opr;
+                Right = right;
             }
 
-            public override R Accept<R>(Visitor<R> visitor)
+            public override R Accept<R>(IVisitor<R> visitor)
             {
                 return visitor.VisitBinaryExpr(this);
             }
@@ -33,14 +33,14 @@ namespace TrashML
 
         public class Grouping : Expr
         {
-            public Expr Expression;
+            public readonly Expr Expression;
 
             public Grouping(Expr expression)
             {
-                this.Expression = expression;
+                Expression = expression;
             }
 
-            public override R Accept<R>(Visitor<R> visitor)
+            public override R Accept<R>(IVisitor<R> visitor)
             {
                 return visitor.VisitGroupingExpr(this);
             }
@@ -48,16 +48,16 @@ namespace TrashML
 
         public class Unary : Expr
         {
-            public Lexer.Token Operator;
-            public Expr Right;
+            public readonly Lexer.Token Operator;
+            public readonly Expr Right;
 
             public Unary(Lexer.Token oprt, Expr right)
             {
-                this.Operator = oprt;
-                this.Right = right;
+                Operator = oprt;
+                Right = right;
             }
 
-            public override R Accept<R>(Visitor<R> visitor)
+            public override R Accept<R>(IVisitor<R> visitor)
             {
                 return visitor.VisitUnaryExpr(this);
             }
@@ -65,14 +65,14 @@ namespace TrashML
 
         public class Variable : Expr
         {
-            public Lexer.Token Name;
+            public readonly Lexer.Token Name;
 
             public Variable(Lexer.Token name)
             {
-                this.Name = name;
+                Name = name;
             }
 
-            public override R Accept<R>(Visitor<R> visitor)
+            public override R Accept<R>(IVisitor<R> visitor)
             {
                 return visitor.VisitVariableExpr(this);
             }
@@ -80,19 +80,19 @@ namespace TrashML
 
         public class Literal : Expr
         {
-            public object Value;
+            public readonly object Value;
 
             public Literal(object value)
             {
-                this.Value = value;
+                Value = value;
             }
 
-            public override R Accept<R>(Visitor<R> visitor)
+            public override R Accept<R>(IVisitor<R> visitor)
             {
                 return visitor.VisitLiteralExpr(this);
             }
         }
 
-        public abstract R Accept<R>(Visitor<R> visitor);
+        public abstract R Accept<R>(IVisitor<R> visitor);
     }
 }

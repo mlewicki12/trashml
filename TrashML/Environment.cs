@@ -7,7 +7,9 @@ namespace TrashML
     public class Environment
     {
         public Environment Enclosing;
-        private Dictionary<string, Object> values = new Dictionary<string, Object>();
+        
+        private Dictionary<string, object> macros = new Dictionary<string, object>();
+        private Dictionary<string, object> values = new Dictionary<string, object>();
 
         public Environment() : this(null)
         {
@@ -25,6 +27,11 @@ namespace TrashML
                 return values[name.Literal];
             }
 
+            if (macros.ContainsKey(name.Literal))
+            {
+                return macros[name.Literal];
+            }
+
             if (Enclosing != null) return Enclosing.Get(name);
 
             throw new Interpreter.RuntimeError("Attempting to access undefined variable " + name.Literal);
@@ -32,27 +39,22 @@ namespace TrashML
 
         public bool Contains(Lexer.Token name)
         {
-            return values.ContainsKey(name.Literal);
+            return values.ContainsKey(name.Literal) || macros.ContainsKey(name.Literal);
         }
 
-        public void Define(Lexer.Token name, Object value)
+        public void Define(Lexer.Token name, object value)
         {
-            if (!values.ContainsKey(name.Literal))
+            if (value is Stmt.Macro)
             {
-                var encl = Enclosing;
-                while (encl != null)
+                if (!macros.ContainsKey(name.Literal))
                 {
-                    if (encl.Contains(name))
-                    {
-                        encl.Define(name, value);
-                        break;
-                    }
+                    macros.Add(name.Literal, value);
                 }
-
+                else values[name.Literal] = value;
+            } else if (!values.ContainsKey(name.Literal))
+            {
                 values.Add(name.Literal, value);
-            }
-
-            values[name.Literal] = value;
+            } else values[name.Literal] = value;
         }
     }
 }

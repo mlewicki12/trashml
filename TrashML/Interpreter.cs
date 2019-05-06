@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 namespace TrashML
 {
-    public class Interpreter : Expr.Visitor<System.Object>,
-        Stmt.Visitor<string> // this string doesn't actually matter, but we can't use Void in C#
+    public class Interpreter : Expr.IVisitor<object>,
+        Stmt.IVisitor<string> // this string doesn't actually matter, but we can't use Void in C#
     {
         public class RuntimeError : Exception
         {
@@ -14,8 +14,14 @@ namespace TrashML
             }
         }
 
-        public Environment IntEnvironment = new Environment();
-        public Environment Macros = new Environment();
+        public Environment IntEnvironment;
+        public List<RuntimeError> Errors;
+
+        public Interpreter()
+        {
+            IntEnvironment = new Environment();
+            Errors = new List<RuntimeError>();
+        }
 
         public void Interpret(List<Stmt> statements)
         {
@@ -28,14 +34,14 @@ namespace TrashML
             }
             catch (RuntimeError e)
             {
-                // do something
+                Errors.Add(e);
             }
         }
 
         public object VisitBinaryExpr(Expr.Binary expr)
         {
-            object left = evaluate(expr.Left);
-            object right = evaluate(expr.Right);
+            var left = evaluate(expr.Left);
+            var right = evaluate(expr.Right);
 
             switch (expr.Operator.Type)
             {
@@ -80,7 +86,7 @@ namespace TrashML
 
         public object VisitUnaryExpr(Expr.Unary expr)
         {
-            object right = evaluate(expr.Right);
+            var right = evaluate(expr.Right);
 
             if (right is int)
             {
@@ -103,14 +109,27 @@ namespace TrashML
 
         public object VisitVariableExpr(Expr.Variable expr)
         {
-            if (this.Macros.Contains(expr.Name))
+            var env = IntEnvironment;
+            while (env != null && !env.Contains(expr.Name))
             {
-                executeBlock((this.Macros.Get(expr.Name) as Stmt.Macro).Body.Statements,
-                    new Environment(IntEnvironment));
+                // run through all the environments to check if we have the variable
+                env = env.Enclosing;
+            }
+
+            if (env == null)
+            {
+                throw new RuntimeError($"Trying to access non-existing variable {expr.Name.Literal}");
+            }
+
+            var value = env.Get(expr.Name);
+
+            if (value is Stmt.Macro) // if it's a macro, run it as a macro
+            {
+                executeBlock((value as Stmt.Macro).Body.Statements, new Environment(IntEnvironment));
                 return true;
             }
 
-            return IntEnvironment.Get(expr.Name);
+            return env.Get(expr.Name);
         }
 
         public object VisitLiteralExpr(Expr.Literal expr)
@@ -130,7 +149,7 @@ namespace TrashML
             return "";
         }
 
-        public string VisitAssignStmt(Stmt.Assign stmt)
+        public string VisitLetStmt(Stmt.Assign stmt)
         {
             object value = evaluate(stmt.Initialiser);
 
@@ -165,36 +184,15 @@ namespace TrashML
 
                 throw new RuntimeError("Invalid values for repeat loop");
             }
-            else // this guy's got a condition
+            
+            // otherwise this guy's got a condition
+            var cond = evaluate(stmt.Condition);
+            if (cond is bool)
             {
-                var cond = evaluate(stmt.Condition);
-                if (cond is bool)
+                while ((bool) evaluate(stmt.Condition))
                 {
-                    while ((bool) evaluate(stmt.Condition))
-                    {
-                        execute(stmt.Block);
-                    }
+                    execute(stmt.Block);
                 }
-            }
-
-            return "";
-        }
-
-        string intToDir(int num)
-        {
-            switch (num)
-            {
-                case 0:
-                    return "up";
-
-                case 1:
-                    return "right";
-
-                case 2:
-                    return "down";
-
-                case 3:
-                    return "left";
             }
 
             return "";
@@ -229,8 +227,13 @@ namespace TrashML
 
         public string VisitMacroStmt(Stmt.Macro stmt)
         {
-            Macros.Define(stmt.Name, stmt);
+            IntEnvironment.Define(stmt.Name, stmt);
             return "";
+        }
+
+        public bool Error()
+        {
+            return Errors.Count != 0;
         }
 
         object evaluate(Expr expr)
@@ -245,11 +248,11 @@ namespace TrashML
 
         void executeBlock(List<Stmt> statements, Environment env)
         {
-            Environment previous = this.IntEnvironment;
+            Environment previous = IntEnvironment;
 
             try
             {
-                this.IntEnvironment = env;
+                IntEnvironment = env;
 
                 foreach (var statement in statements)
                 {
@@ -258,7 +261,7 @@ namespace TrashML
             }
             finally
             {
-                this.IntEnvironment = previous;
+                IntEnvironment = previous;
             }
         }
     }

@@ -16,7 +16,7 @@ namespace TrashML
         public List<Lexer.Token> Tokens;
         public List<ParseError> Errors;
 
-        private int Current = 0;
+        private int _current = 0;
 
         public Parser() : this(new List<Lexer.Token>())
         {
@@ -24,13 +24,13 @@ namespace TrashML
 
         public Parser(List<Lexer.Token> tokens)
         {
-            this.Tokens = tokens;
-            this.Errors = new List<ParseError>();
+            Tokens = tokens;
+            Errors = new List<ParseError>();
         }
 
         public List<Stmt> Parse(List<Lexer.Token> tokens)
         {
-            this.Tokens = tokens;
+            Tokens = tokens;
             return Parse();
         }
 
@@ -56,6 +56,11 @@ namespace TrashML
             }
 
             return statements;
+        }
+        
+        public bool Error()
+        {
+            return Errors.Count != 0;
         }
 
         Stmt statement()
@@ -287,12 +292,12 @@ namespace TrashML
 
         Lexer.Token peek()
         {
-            return Tokens[Current];
+            return Tokens[_current];
         }
 
         Lexer.Token previous()
         {
-            return Tokens[Current - 1];
+            return Tokens[_current - 1];
         }
 
         Lexer.Token consume(string message, params Lexer.Token.TokenType[] types)
@@ -326,7 +331,7 @@ namespace TrashML
         {
             if (!isAtEnd())
             {
-                Current += 1;
+                _current += 1;
             }
 
             return previous();
