@@ -15,9 +15,9 @@ namespace TrashML
             }
         }
 
-        private Dictionary<string, Token.TokenType> Keywords;
+        private readonly Dictionary<string, Token.TokenType> Keywords;
 
-        private string _source;
+        private readonly string _source;
         private int _start;
         private int _current;
         
@@ -107,6 +107,8 @@ namespace TrashML
         public List<Token> Scan()
         {
             Tokens = new List<Token>();
+            Errors = new List<ScanError>();
+            
             _start = 0;
             _current = 0;
 

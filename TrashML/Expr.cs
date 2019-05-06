@@ -51,9 +51,9 @@ namespace TrashML
             public readonly Lexer.Token Operator;
             public readonly Expr Right;
 
-            public Unary(Lexer.Token oprt, Expr right)
+            public Unary(Lexer.Token op, Expr right)
             {
-                Operator = oprt;
+                Operator = op;
                 Right = right;
             }
 
