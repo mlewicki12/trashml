@@ -38,6 +38,7 @@ namespace TrashML
             Keywords = new Dictionary<string, Token.TokenType>();
             
             Keywords.Add("repeat", Token.TokenType.REPEAT);
+            Keywords.Add("require", Token.TokenType.REQUIRE);
             Keywords.Add("let", Token.TokenType.LET);
             Keywords.Add("if", Token.TokenType.IF);
             Keywords.Add("else", Token.TokenType.ELSE);
@@ -75,6 +76,7 @@ namespace TrashML
                 COMMA,
 
                 REPEAT,
+                REQUIRE,
                 COLON,
                 IF,
                 ELSE,

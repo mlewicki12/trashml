@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace TrashML
 {
@@ -62,6 +63,7 @@ namespace TrashML
                 if (match(Lexer.Token.TokenType.DO)) return new Stmt.Block(block());
                 if (match(Lexer.Token.TokenType.LET)) return assignment();
                 if (match(Lexer.Token.TokenType.REPEAT)) return repeat();
+                if (match(Lexer.Token.TokenType.REQUIRE)) return require();
                 if (match(Lexer.Token.TokenType.DOTTED)) return dotted();
                 if (match(Lexer.Token.TokenType.IF)) return ifstmt();
                 if (match(Lexer.Token.TokenType.MACRO)) return macro();
@@ -139,6 +141,10 @@ namespace TrashML
             }
 
             return new Stmt.Repeat(left, blk);
+        }
+
+        Stmt require() {
+            return new Stmt.Require(primary());
         }
 
         Stmt dotted()
