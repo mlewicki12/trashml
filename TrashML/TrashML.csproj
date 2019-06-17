@@ -42,7 +42,23 @@
     <Compile Include="Expr.cs" />
     <Compile Include="Interpreter.cs" />
     <Compile Include="Lexer.cs" />
-    <Compile Include="Parser.cs" />
+    <Compile Include="ParseHelp\Addition.cs" />
+    <Compile Include="ParseHelp\Assignment.cs" />
+    <Compile Include="ParseHelp\Block.cs" />
+    <Compile Include="ParseHelp\Comparison.cs" />
+    <Compile Include="ParseHelp\Condition.cs" />
+    <Compile Include="ParseHelp\Dotted.cs" />
+    <Compile Include="ParseHelp\Grouping.cs" />
+    <Compile Include="ParseHelp\If.cs" />
+    <Compile Include="ParseHelp\Macro.cs" />
+    <Compile Include="ParseHelp\Multiplication.cs" />
+    <Compile Include="ParseHelp\Parser.cs" />
+    <Compile Include="ParseHelp\Primary.cs" />
+    <Compile Include="ParseHelp\Print.cs" />
+    <Compile Include="ParseHelp\Repeat.cs" />
+    <Compile Include="ParseHelp\Require.cs" />
+    <Compile Include="ParseHelp\Statement.cs" />
+    <Compile Include="ParseHelp\Unary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stmt.cs" />
   </ItemGroup>

@@ -62,6 +62,7 @@ namespace TrashML
             Keywords.Add("true", Token.TokenType.TRUE);
             Keywords.Add("and", Token.TokenType.AND);
             Keywords.Add("or", Token.TokenType.OR);
+            Keywords.Add("class", Token.TokenType.CLASS);
         }
 
         public class Token
@@ -88,6 +89,7 @@ namespace TrashML
 
                 REPEAT,
                 REQUIRE,
+                CLASS,
                 COLON,
                 IF,
                 ELSE,
