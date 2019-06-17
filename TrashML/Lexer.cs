@@ -7,11 +7,20 @@ namespace TrashML
 {
     public class Lexer
     {
+        // error codes could be an idea?
         public class ScanError : Exception
         {
-            public ScanError(string msg) : base(msg)
+            public int Line;
+            
+            public ScanError(string msg, int line) : base(msg)
             {
+                // workaround, because lines are indexed from 0
+                Line = line + 1;
+            }
 
+            public override string ToString()
+            {
+                return $"TrashML Scan Error, line {Line}: {Message}";
             }
         }
 
@@ -20,6 +29,7 @@ namespace TrashML
         private readonly string _source;
         private int _start;
         private int _current;
+        private int _line;
         
         public List<Token> Tokens;
         public List<ScanError> Errors;
@@ -30,6 +40,7 @@ namespace TrashML
 
             _start = 0;
             _current = 0;
+            _line = 0;
 
             Tokens = new List<Token>();
             Errors = new List<ScanError>();
@@ -96,6 +107,7 @@ namespace TrashML
             }
 
             public TokenType Type;
+            public int Line;
             public string Literal;
 
             public override string ToString()
@@ -111,6 +123,7 @@ namespace TrashML
             
             _start = 0;
             _current = 0;
+            _line = 0;
 
             while (!isAtEnd())
             {
@@ -144,9 +157,11 @@ namespace TrashML
                     // crush empty lines down to one new line
                     while (peek() == '\n')
                     {
+                        _line += 1;
                         advance();
                     }
 
+                    _line += 1;
                     addToken(Token.TokenType.NEWLINE, "\n");
                     break;
 
@@ -240,7 +255,7 @@ namespace TrashML
                     }
                     else
                     {
-                        throw new ScanError("Invalid character found in input!");
+                        throw new ScanError($"Invalid character {c} found in input!", _line);
                     }
 
                     break;
@@ -254,7 +269,7 @@ namespace TrashML
 
         void addToken(Token.TokenType toAdd, string lit)
         {
-            Tokens.Add(new Token {Type = toAdd, Literal = lit});
+            Tokens.Add(new Token {Type = toAdd, Line = _line, Literal = lit});
         }
 
         void number()
@@ -304,7 +319,7 @@ namespace TrashML
             {
                 if (isAtEnd())
                 {
-                    throw new ScanError("Expected ending '\"' when defining string value");
+                    throw new ScanError("Expected ending '\"' when defining string value", _line);
                 }
 
                 c = advance();
@@ -319,6 +334,8 @@ namespace TrashML
             while (!isAtEnd() && advance() != '\n')
             {
             }
+
+            _line += 1;
         }
 
         char advance()

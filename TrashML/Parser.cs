@@ -9,8 +9,16 @@ namespace TrashML
     {
         public class ParseError : Exception
         {
-            public ParseError(string msg) : base(msg)
+            public int Line;
+            
+            public ParseError(string msg, int line) : base(msg)
             {
+                Line = line + 1;
+            }
+
+            public override string ToString()
+            {
+                return $"TrashML Parse Error, line {Line}: {Message}";
             }
         }
 
@@ -82,7 +90,7 @@ namespace TrashML
 
         List<Stmt> block()
         {
-            // should get rid of pesky newlines?
+            // should get rid of pesky newlines
             while (match(Lexer.Token.TokenType.NEWLINE))
             {
             }
@@ -104,7 +112,7 @@ namespace TrashML
 
         Stmt assignment()
         {
-            Lexer.Token name = consume("Expected identifier after 'let'", Lexer.Token.TokenType.IDENTIFIER);
+            Lexer.Token name = consume("Expected identifier after 'let'",Lexer.Token.TokenType.IDENTIFIER);
 
             Expr initialiser = null;
             if (match(Lexer.Token.TokenType.EQUAL))
@@ -119,6 +127,8 @@ namespace TrashML
 
         Stmt repeat()
         {
+            var line = previous().Line;
+            
             Expr left = comparison();
             Expr right = null;
 
@@ -131,7 +141,7 @@ namespace TrashML
 
             Stmt.Block blk = null;
             if (match(Lexer.Token.TokenType.DO)) blk = new Stmt.Block(block());
-            else throw new ParseError("Expected block after repeat statement");
+            else throw new ParseError("Expected block after repeat statement", line);
 
             if (right != null)
             {
@@ -151,6 +161,7 @@ namespace TrashML
 
         Stmt ifstmt()
         {
+            var line = previous().Line;
             var cond = comparison();
 
             consume("Expected 'do' after 'if'", Lexer.Token.TokenType.DO);
@@ -159,7 +170,8 @@ namespace TrashML
 
             if (match(Lexer.Token.TokenType.ELSE))
             {
-                consume("Expected 'do' after 'else'", Lexer.Token.TokenType.DO);
+                line = previous().Line;
+                consume("Expected 'do' after 'else'",Lexer.Token.TokenType.DO);
                 blk2 = block();
             }
 
@@ -168,7 +180,7 @@ namespace TrashML
 
         Stmt macro()
         {
-            consume("Expected identifier after macro definition", Lexer.Token.TokenType.IDENTIFIER);
+            consume("Expected identifier after macro definition",Lexer.Token.TokenType.IDENTIFIER);
             var id = previous();
 
             consume("Expected block after macro identifier", Lexer.Token.TokenType.DO);
@@ -255,7 +267,7 @@ namespace TrashML
             if (match(Lexer.Token.TokenType.IDENTIFIER)) return new Expr.Variable(previous());
             if (match( Lexer.Token.TokenType.STRING)) return new Expr.Literal(previous().Literal);
 
-            throw new ParseError("Expecting expression");
+            throw new ParseError("Expecting expression", previous().Line);
         }
 
         Expr addition()
@@ -298,6 +310,7 @@ namespace TrashML
 
         Lexer.Token consume(string message, params Lexer.Token.TokenType[] types)
         {
+            var line = previous().Line;
             foreach (var type in types)
             {
                 if (check(type))
@@ -306,7 +319,8 @@ namespace TrashML
                 }
             }
 
-            throw new ParseError(message);
+            Console.WriteLine(Tokens[_current - 3]);
+            throw new ParseError(message, line);
         }
 
         bool match(params Lexer.Token.TokenType[] tokens)

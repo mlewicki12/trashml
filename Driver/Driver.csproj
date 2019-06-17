@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestFiles\booleans.tm" />
+    <Content Include="TestFiles\parse_errors.tm" />
+    <Content Include="TestFiles\scan_errors.tm" />
     <Content Include="TestFiles\macros.tm" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
