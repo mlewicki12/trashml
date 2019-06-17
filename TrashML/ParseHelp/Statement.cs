@@ -11,7 +11,6 @@ namespace TrashML.ParseHelp
                 if (parser.Match(Lexer.Token.TokenType.LET)) return parser.Assignment();
                 if (parser.Match(Lexer.Token.TokenType.REPEAT)) return parser.Repeat();
                 if (parser.Match(Lexer.Token.TokenType.REQUIRE)) return parser.Require();
-                if (parser.Match(Lexer.Token.TokenType.DOTTED)) return parser.Dotted();
                 if (parser.Match(Lexer.Token.TokenType.IF)) return parser.If();
                 if (parser.Match(Lexer.Token.TokenType.MACRO)) return parser.Macro();
                 if (parser.Match(Lexer.Token.TokenType.PRINT)) return parser.Print();

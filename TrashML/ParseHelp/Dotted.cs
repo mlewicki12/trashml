@@ -3,17 +3,25 @@ namespace TrashML.ParseHelp
 {
     public static class DottedExtension
     {
-        public static Stmt Dotted(this Parser parser)
+        public static Expr Dotted(this Parser parser)
         {
-            // you weren't pretty enough
-            // and I still need to fix you
+            // this is probably not working yet, but the framework's there
+            // so this should work at some point
+            // like once I get classes working
             
-            // is this pop punk
-            
-            // probably should just treat the dot as an operator
-            var value = parser.Previous().Literal.Split('.');
-            return new Stmt.Dotted(new Lexer.Token{Type = Lexer.Token.TokenType.IDENTIFIER, Literal = value[0]},
-                new Lexer.Token{Type = Lexer.Token.TokenType.IDENTIFIER, Literal = value[1]});
+            // actually I don't even have this used atm
+            // so it doesn't work
+            // but it will work someday
+            Expr expr = parser.Primary();
+
+            while (parser.Match(Lexer.Token.TokenType.DOT))
+            {
+                Lexer.Token op = parser.Previous();
+                Expr right = parser.Unary();
+                expr = new Expr.Binary(expr, op, right);
+            }
+
+            return expr;
         }
     }
 }

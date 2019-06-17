@@ -8,6 +8,7 @@ namespace TrashML
     public class Lexer
     {
         // error codes could be an idea?
+        // also a general better handling of errors lol
         public class ScanError : Exception
         {
             public int Line;
@@ -67,47 +68,25 @@ namespace TrashML
 
         public class Token
         {
-            // TODO: organise this and make it look better
             public enum TokenType
             {
-                NUMBER,
-                IDENTIFIER,
-                PLUS,
-                MINUS,
-                MULTIPLY,
-                DIVIDE,
-                EQUAL,
-                BANG,
-                BANG_EQUAL,
-                LESS_EQUAL,
-                LESS,
-                GREATER_EQUAL,
-                GREATER,
-                LEFT_PAREN,
-                RIGHT_PAREN,
-                COMMA,
-
-                REPEAT,
-                REQUIRE,
-                CLASS,
-                COLON,
-                IF,
-                ELSE,
-                MACRO,
-                EOF,
-                DO,
-                END,
-                PRINT,
-                DOT,
-                TO,
-                LET,
-                NEWLINE,
-                FALSE,
-                TRUE,
-                DOTTED,
-                STRING,
-                AND,
-                OR
+                NUMBER, IDENTIFIER, STRING,
+                
+                PLUS, MINUS, MULTIPLY, DIVIDE,
+                EQUAL, BANG, BANG_EQUAL, 
+                
+                COMMA, COLON, DOT,
+                
+                LESS_EQUAL, LESS,
+                GREATER_EQUAL, GREATER,
+                
+                LEFT_PAREN, RIGHT_PAREN,
+                
+                REPEAT, REQUIRE, CLASS, IF,
+                ELSE, MACRO, DO, END, PRINT,
+                TO, LET, TRUE, FALSE, AND, OR,
+                
+                NEWLINE, EOF
             }
 
             public TokenType Type;
@@ -116,6 +95,12 @@ namespace TrashML
 
             public override string ToString()
             {
+                if (Type == TokenType.NEWLINE)
+                {
+                    // I don't wanna print newlines
+                    return $"Token [{Type}]";
+                }
+                
                 return $"Token [{Type}]: {Literal}";
             }
         }
@@ -289,16 +274,10 @@ namespace TrashML
         void identifier()
         {
             var c = peek();
-            var dotted = false;
             
             while (isAlphaNumeric(c))
             {
                 advance();
-                if (c == '.')
-                {
-                    dotted = true;
-                }
-                
                 c = peek();
             }
 
@@ -309,10 +288,7 @@ namespace TrashML
             }
             else
             {
-                if (dotted)
-                {
-                    addToken(Token.TokenType.DOTTED, text);
-                } else addToken(Token.TokenType.IDENTIFIER, text);
+                addToken(Token.TokenType.IDENTIFIER, text);
             }
         }
         
@@ -364,7 +340,7 @@ namespace TrashML
 
         bool isAlpha(char c)
         {
-            return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c == '_') | (c == '.'));
+            return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c == '_'));
         }
 
         bool isAlphaNumeric(char c)
