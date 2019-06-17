@@ -325,7 +325,6 @@ namespace TrashML
                 }
             }
 
-            Console.WriteLine(Tokens[_current - 3]);
             throw new ParseError(message, line);
         }
 
