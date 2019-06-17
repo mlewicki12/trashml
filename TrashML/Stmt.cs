@@ -12,6 +12,7 @@ namespace TrashML
             R VisitLetStmt(Assign stmt);
             R VisitPrintStmt(Print stmt);
             R VisitRepeatStmt(Repeat stmt);
+            R VisitRequireStmt(Require stmt);
             R VisitDottedStmt(Dotted stmt);
             R VisitIfStmt(If stmt);
             R VisitMacroStmt(Macro stmt);
@@ -102,6 +103,20 @@ namespace TrashML
             public override R Accept<R>(IVisitor<R> visitor)
             {
                 return visitor.VisitRepeatStmt(this);
+            }
+        }
+
+        public class Require : Stmt {
+            public readonly Expr File;
+
+            public Require(Expr file) 
+            {
+                File = file;
+            }
+
+            public override R Accept<R>(IVisitor<R> visitor) 
+            {
+                return visitor.VisitRequireStmt(this);
             }
         }
 

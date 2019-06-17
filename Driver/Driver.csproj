@@ -52,6 +52,8 @@
     <Content Include="TestFiles\parse_errors.tm" />
     <Content Include="TestFiles\scan_errors.tm" />
     <Content Include="TestFiles\macros.tm" />
+    <Content Include="TestFiles\require.tm" />
+    <Content Include="TestFiles\test.tm" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
