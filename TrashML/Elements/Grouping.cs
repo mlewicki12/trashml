@@ -1,5 +1,5 @@
 
-namespace TrashML.ParseHelp
+namespace TrashML.Elements
 {
     public static class GroupingExtension
     {
@@ -9,6 +9,11 @@ namespace TrashML.ParseHelp
 
             parser.Consume("Expected ')' after '('", Lexer.Token.TokenType.RIGHT_PAREN);
             return new Expr.Grouping(expr);
+        }
+
+        public static object GroupingExpr(this Interpreter interpreter, Expr.Grouping expr)
+        {
+            return interpreter.Evaluate(expr.Expression);
         }
     }
 }

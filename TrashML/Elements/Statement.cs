@@ -1,5 +1,5 @@
 
-namespace TrashML.ParseHelp
+namespace TrashML.Elements
 {
     public static class StatementExtension
     {
@@ -9,7 +9,7 @@ namespace TrashML.ParseHelp
             {
                 if (parser.Match(Lexer.Token.TokenType.CLASS)) return parser.Class();
                 if (parser.Match(Lexer.Token.TokenType.DO)) return new Stmt.Block(parser.Block());
-                if (parser.Match(Lexer.Token.TokenType.LET)) return parser.Assignment();
+                if (parser.Match(Lexer.Token.TokenType.LET)) return parser.Assign();
                 if (parser.Match(Lexer.Token.TokenType.REPEAT)) return parser.Repeat();
                 if (parser.Match(Lexer.Token.TokenType.REQUIRE)) return parser.Require();
                 if (parser.Match(Lexer.Token.TokenType.IF)) return parser.If();

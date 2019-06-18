@@ -1,7 +1,8 @@
 
+using System;
 using System.Collections.Generic;
 
-namespace TrashML.ParseHelp
+namespace TrashML.Elements
 {
     public static class MemberExtension
     {
@@ -26,6 +27,11 @@ namespace TrashML.ParseHelp
             }
             
             return new Stmt.Member(name, initialiser);
+        }
+
+        public static string MemberStmt(this Interpreter interpreter, Stmt.Member stmt)
+        {
+            throw new NotImplementedException();
         }
     }
 }

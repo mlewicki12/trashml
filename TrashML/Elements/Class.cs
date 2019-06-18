@@ -1,5 +1,7 @@
 
-namespace TrashML.ParseHelp
+using System;
+
+namespace TrashML.Elements
 {
     public static class ClassExtension
     {
@@ -11,6 +13,11 @@ namespace TrashML.ParseHelp
             parser.Consume("Expected block after class identifier", Lexer.Token.TokenType.DEFINE);
 
             return new Stmt.Class(id, new Stmt.Define(parser.Define()));
+        }
+
+        public static string ClassStmt(this Interpreter interpreter, Stmt.Class stmt)
+        {
+            throw new NotImplementedException();
         }
     }
 }

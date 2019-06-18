@@ -11,7 +11,7 @@ namespace TrashML
             R VisitDefineStmt(Define stmt);
             R VisitExpressionStmt(Expression stmt);
             R VisitMemberStmt(Member stmt);
-            R VisitLetStmt(Assign stmt);
+            R VisitAssignStmt(Assign stmt);
             R VisitPrintStmt(Print stmt);
             R VisitRepeatStmt(Repeat stmt);
             R VisitReturnStmt(Return stmt);
@@ -79,7 +79,7 @@ namespace TrashML
 
             public override R Accept<R>(IVisitor<R> visitor)
             {
-                return visitor.VisitLetStmt(this);
+                return visitor.VisitAssignStmt(this);
             }
         }
 

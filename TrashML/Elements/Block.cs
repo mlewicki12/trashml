@@ -1,7 +1,7 @@
 
 using System.Collections.Generic;
 
-namespace TrashML.ParseHelp
+namespace TrashML.Elements
 {
     public static class BlockExtension
     {
@@ -14,7 +14,7 @@ namespace TrashML.ParseHelp
 
             List<Stmt> statements = new List<Stmt>();
 
-            while (!parser.Check(Lexer.Token.TokenType.END) && !parser.IsAtEnd())
+            while (!parser.Check(Lexer.Token.TokenType.END, Lexer.Token.TokenType.ELSE) && !parser.IsAtEnd())
             {
                 // we have a return statement yay
                 if (parser.Match(Lexer.Token.TokenType.RETURN))
@@ -35,8 +35,21 @@ namespace TrashML.ParseHelp
                 }
             }
 
+            // I don't want it to eat the else
+            if (parser.Check(Lexer.Token.TokenType.ELSE))
+            {
+                return statements;
+            }
+            
             parser.Consume("Expected 'end' after 'do'", Lexer.Token.TokenType.END);
             return statements;
-        }   
+        }
+
+        public static string BlockStmt(this Interpreter interpreter, Stmt.Block stmt)
+        {
+            // implement returns at some point pls
+            interpreter.ExecuteBlock(stmt.Statements, new Environment(interpreter.IntEnvironment.Name + " Block", interpreter.IntEnvironment));
+            return "";
+        }
     }
 }

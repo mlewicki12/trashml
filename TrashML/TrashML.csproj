@@ -42,32 +42,28 @@
     <Compile Include="Expr.cs" />
     <Compile Include="Interpreter.cs" />
     <Compile Include="Lexer.cs" />
-    <Compile Include="ParseHelp\Addition.cs" />
-    <Compile Include="ParseHelp\Assignment.cs" />
-    <Compile Include="ParseHelp\Block.cs" />
-    <Compile Include="ParseHelp\Class.cs" />
-    <Compile Include="ParseHelp\Comparison.cs" />
-    <Compile Include="ParseHelp\Condition.cs" />
-    <Compile Include="ParseHelp\Define.cs" />
-    <Compile Include="ParseHelp\Dotted.cs" />
-    <Compile Include="ParseHelp\Grouping.cs" />
-    <Compile Include="ParseHelp\If.cs" />
-    <Compile Include="ParseHelp\Macro.cs" />
-    <Compile Include="ParseHelp\Member.cs" />
-    <Compile Include="ParseHelp\Multiplication.cs" />
-    <Compile Include="ParseHelp\Parser.cs" />
-    <Compile Include="ParseHelp\Primary.cs" />
-    <Compile Include="ParseHelp\Print.cs" />
-    <Compile Include="ParseHelp\Repeat.cs" />
-    <Compile Include="ParseHelp\Require.cs" />
-    <Compile Include="ParseHelp\Return.cs" />
-    <Compile Include="ParseHelp\Statement.cs" />
-    <Compile Include="ParseHelp\Unary.cs" />
+    <Compile Include="Elements\Assign.cs" />
+    <Compile Include="Elements\Block.cs" />
+    <Compile Include="Elements\Class.cs" />
+    <Compile Include="Elements\Binary.cs" />
+    <Compile Include="Elements\Define.cs" />
+    <Compile Include="Elements\Grouping.cs" />
+    <Compile Include="Elements\If.cs" />
+    <Compile Include="Elements\Macro.cs" />
+    <Compile Include="Elements\Member.cs" />
+    <Compile Include="Elements\Primary.cs" />
+    <Compile Include="Elements\Print.cs" />
+    <Compile Include="Elements\Repeat.cs" />
+    <Compile Include="Elements\Require.cs" />
+    <Compile Include="Elements\Return.cs" />
+    <Compile Include="Elements\Statement.cs" />
+    <Compile Include="Elements\Unary.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stmt.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ParseHelp\.grammar" />
+    <Content Include="Elements\.grammar" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,7 +5,7 @@ Statement      -> ClassStmt  | BlockStmt | LetStmt   | RepeatStmt |
                  
 ClassStmt      -> class IDENTIFIER DefineStmt
 
-BlockStmt      -> do Statement* end
+BlockStmt      -> do Statement* (else Statement*)? end
 
 DefineStmt     -> define MemberStmt* end
 
@@ -19,7 +19,7 @@ RepeatStmt     -> repeat ComparisonExpr BlockStmt |
                   
 RequireStmt    -> require PrimaryValue
 
-IfStmt         -> if ComparisonExpr BlockStmt (else BlockStmt)?
+IfStmt         -> if ComparisonExpr BlockStmt
 
 MacroStmt      -> macro IDENTIFIER BlockStmt
 

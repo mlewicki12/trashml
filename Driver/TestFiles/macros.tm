@@ -3,7 +3,7 @@
 macro test do
     if x > 6 do
         print x
-    end else do
+    else
         print 6
     end
 end

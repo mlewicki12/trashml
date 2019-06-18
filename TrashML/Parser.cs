@@ -1,7 +1,8 @@
 
 using System;
 using System.Collections.Generic;
-using TrashML.ParseHelp;
+using System.Linq;
+using TrashML.Elements;
 
 namespace TrashML
 {
@@ -101,6 +102,16 @@ namespace TrashML
             return false;
         }
 
+        public bool Check(params Lexer.Token.TokenType[] type)
+        {
+            if (IsAtEnd() && !type.Contains(Lexer.Token.TokenType.EOF))
+            {
+                return false;
+            }
+
+            return type.Contains(Peek().Type);
+        }
+        
         public Lexer.Token Advance()
         {
             if (!IsAtEnd())
@@ -124,16 +135,6 @@ namespace TrashML
         public bool IsAtEnd()
         {
             return Peek().Type == Lexer.Token.TokenType.EOF;
-        }
-
-        public bool Check(Lexer.Token.TokenType type)
-        {
-            if (IsAtEnd() && type != Lexer.Token.TokenType.EOF)
-            {
-                return false;
-            }
-
-            return Peek().Type == type;
         }
     }
 }

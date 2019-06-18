@@ -1,5 +1,7 @@
 
-namespace TrashML.ParseHelp
+using System;
+
+namespace TrashML.Elements
 {
     public static class ReturnExpression
     {
@@ -7,6 +9,11 @@ namespace TrashML.ParseHelp
         {
             var value = parser.Comparison();
             return new Stmt.Return(value);
+        }
+
+        public static string ReturnStmt(this Interpreter interpreter, Stmt.Return stmt)
+        {
+            throw new NotImplementedException();
         }
     }
 }

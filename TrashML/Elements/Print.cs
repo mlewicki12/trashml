@@ -1,5 +1,7 @@
 
-namespace TrashML.ParseHelp
+using System;
+
+namespace TrashML.Elements
 {
     public static class PrintExtension
     {
@@ -11,6 +13,14 @@ namespace TrashML.ParseHelp
                 Lexer.Token.TokenType.EOF);
             
             return new Stmt.Print(expr);
-        } 
+        }
+
+        public static string PrintStmt(this Interpreter interpreter, Stmt.Print stmt)
+        {
+            object value = interpreter.Evaluate(stmt.Expression);
+            Console.WriteLine(value);
+
+            return "";
+        }
     }
 }

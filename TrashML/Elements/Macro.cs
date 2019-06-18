@@ -1,5 +1,5 @@
 
-namespace TrashML.ParseHelp
+namespace TrashML.Elements
 {
     public static class MacroExtension
     {
@@ -11,6 +11,12 @@ namespace TrashML.ParseHelp
             parser.Consume("Expected block after macro identifier", Lexer.Token.TokenType.DO);
 
             return new Stmt.Macro(id, new Stmt.Block(parser.Block()));
+        }
+
+        public static string MacroStmt(this Interpreter interpreter, Stmt.Macro stmt)
+        {
+            interpreter.IntEnvironment.Define(stmt.Name, stmt);
+            return "";
         }
     }
 }

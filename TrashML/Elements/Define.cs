@@ -1,7 +1,8 @@
 
+using System;
 using System.Collections.Generic;
 
-namespace TrashML.ParseHelp
+namespace TrashML.Elements
 {
     public static class DefineExtension
     {
@@ -34,6 +35,11 @@ namespace TrashML.ParseHelp
 
             parser.Consume("Expect 'end' after 'define'", Lexer.Token.TokenType.END);
             return statements;
+        }
+
+        public static string DefineStmt(this Interpreter interpreter, Stmt.Define stmt)
+        {
+            throw new NotImplementedException();
         }
     }
 }
