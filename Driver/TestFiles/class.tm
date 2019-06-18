@@ -7,3 +7,5 @@ class Card define
         return suit + " " + value
     end
 end
+
+print Card.suit

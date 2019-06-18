@@ -35,6 +35,10 @@ AdditionExpr   -> MultiplyExpr  ((+|-) MultiplyExpr)*
 
 MultiplyExpr   -> UnaryExpr     ((*|/) UnaryExpr)*
 
-UnaryExpr      -> (!|-)? UnaryExpr | ( UnaryExpr ) | PrimaryExpr
+UnaryExpr      -> (!|-)? UnaryExpr | DottedExpr
+
+DottedExpr     -> Grouping(.Grouping)*
+
+Grouping       -> ( ComparisonExpr ) | PrimaryExpr
 
 PrimaryExpr    -> true | false | NUMBER | IDENTIFIER | STRING

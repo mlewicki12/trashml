@@ -1,4 +1,6 @@
 
+using System.Linq.Expressions;
+
 namespace TrashML.Elements
 {
     public static class BinaryExtension
@@ -58,6 +60,20 @@ namespace TrashML.Elements
                 expr = new Expr.Binary(expr, op, right);
             }
 
+            return expr;
+        }
+
+        public static Expr Dotted(this Parser parser)
+        {
+            Expr expr = parser.Grouping();
+
+            while (parser.Match(Lexer.Token.TokenType.DOT))
+            {
+                Lexer.Token op = parser.Previous();
+                Expr right = parser.Grouping();
+                expr = new Expr.Binary(expr, op, right);
+            }
+            
             return expr;
         }
         
