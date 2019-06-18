@@ -8,14 +8,17 @@ namespace TrashML
         public interface IVisitor<R>
         {
             R VisitBlockStmt(Block stmt);
+            R VisitDefineStmt(Define stmt);
             R VisitExpressionStmt(Expression stmt);
+            R VisitMemberStmt(Member stmt);
             R VisitLetStmt(Assign stmt);
             R VisitPrintStmt(Print stmt);
             R VisitRepeatStmt(Repeat stmt);
+            R VisitReturnStmt(Return stmt);
             R VisitRequireStmt(Require stmt);
-            R VisitDottedStmt(Dotted stmt);
             R VisitIfStmt(If stmt);
             R VisitMacroStmt(Macro stmt);
+            R VisitClassStmt(Class stmt);
         }
 
         public class Block : Stmt
@@ -30,6 +33,21 @@ namespace TrashML
             public override R Accept<R>(IVisitor<R> visitor)
             {
                 return visitor.VisitBlockStmt(this);
+            }
+        }
+
+        public class Define : Stmt
+        {
+            public readonly List<Member> Statements;
+
+            public Define(List<Member> statements)
+            {
+                Statements = statements;
+            }
+
+            public override R Accept<R>(IVisitor<R> visitor)
+            {
+                return visitor.VisitDefineStmt(this);
             }
         }
 
@@ -65,6 +83,31 @@ namespace TrashML
             }
         }
 
+        public class Member : Stmt
+        {
+            public readonly Lexer.Token Name;
+            
+            public readonly Expr Initialiser;
+            public readonly Block Body;
+
+            public Member(Lexer.Token name, Expr initializer)
+            {
+                Name = name;
+                Initialiser = initializer;
+            }
+
+            public Member(Lexer.Token name, Block body)
+            {
+                Name = name;
+                Body = body;
+            }
+
+            public override R Accept<R>(IVisitor<R> visitor)
+            {
+                return visitor.VisitMemberStmt(this);
+            }
+        }
+
         public class Print : Stmt
         {
             public readonly Expr Expression;
@@ -87,13 +130,13 @@ namespace TrashML
             public readonly Expr Condition;
             public readonly Block Block;
 
-            public Repeat(Expr cond, Stmt.Block bl)
+            public Repeat(Expr cond, Block bl)
             {
                 Condition = cond;
                 Block = bl;
             }
 
-            public Repeat(Expr lv, Expr hv, Stmt.Block bl)
+            public Repeat(Expr lv, Expr hv, Block bl)
             {
                 LowValue = lv;
                 HighValue = hv;
@@ -106,7 +149,23 @@ namespace TrashML
             }
         }
 
-        public class Require : Stmt {
+        public class Return : Stmt
+        {
+            public readonly Expr Value;
+
+            public Return(Expr val)
+            {
+                Value = val;
+            }
+
+            public override R Accept<R>(IVisitor<R> visitor)
+            {
+                return visitor.VisitReturnStmt(this);
+            }
+        }
+
+        public class Require : Stmt 
+        {
             public readonly Expr File;
 
             public Require(Expr file) 
@@ -117,23 +176,6 @@ namespace TrashML
             public override R Accept<R>(IVisitor<R> visitor) 
             {
                 return visitor.VisitRequireStmt(this);
-            }
-        }
-
-        public class Dotted : Stmt
-        {
-            public readonly Lexer.Token Operand;
-            public readonly Lexer.Token Operation;
-
-            public Dotted(Lexer.Token operand, Lexer.Token operation)
-            {
-                Operand = operand;
-                Operation = operation;
-            }
-
-            public override R Accept<R>(IVisitor<R> visitor)
-            {
-                return visitor.VisitDottedStmt(this);
             }
         }
 
@@ -162,7 +204,7 @@ namespace TrashML
             public readonly Lexer.Token Name;
             public readonly Block Body;
 
-            public Macro(Lexer.Token name, Stmt.Block body)
+            public Macro(Lexer.Token name, Block body)
             {
                 Name = name;
                 Body = body;
@@ -171,6 +213,23 @@ namespace TrashML
             public override R Accept<R>(IVisitor<R> visitor)
             {
                 return visitor.VisitMacroStmt(this);
+            }
+        }
+
+        public class Class : Stmt
+        {
+            public readonly Lexer.Token Name;
+            public readonly Define Body;
+
+            public Class(Lexer.Token name, Define body)
+            {
+                Name = name;
+                Body = body;
+            }
+
+            public override R Accept<R>(IVisitor<R> visitor)
+            {
+                return visitor.VisitClassStmt(this);
             }
         }
 

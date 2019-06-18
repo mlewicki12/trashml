@@ -5,6 +5,8 @@ using System.IO;
 
 namespace TrashML
 {
+    // might possibly extrapolate into ParseHelp as well
+    // actually I'm gonna do that later today
     public class Interpreter : Expr.IVisitor<object>,
         Stmt.IVisitor<string> // this string doesn't actually matter, but we can't use Void in C#
     {
@@ -166,6 +168,26 @@ namespace TrashML
             return "";
         }
 
+        public string VisitClassStmt(Stmt.Class stmt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string VisitDefineStmt(Stmt.Define stmt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string VisitMemberStmt(Stmt.Member stmt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string VisitReturnStmt(Stmt.Return stmt)
+        {
+            throw new NotImplementedException();
+        }
+
         public string VisitLetStmt(Stmt.Assign stmt)
         {
             object value = evaluate(stmt.Initialiser);
@@ -263,12 +285,6 @@ namespace TrashML
             {
                 return "ERR: " + e.Message;
             }
-        }
-
-        public string VisitDottedStmt(Stmt.Dotted stmt)
-        {
-            // you were used for unity, weren't you
-            throw new NotImplementedException();
         }
 
         public string VisitIfStmt(Stmt.If stmt)

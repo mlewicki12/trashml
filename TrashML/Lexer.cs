@@ -64,6 +64,9 @@ namespace TrashML
             _keywords.Add("and", Token.TokenType.AND);
             _keywords.Add("or", Token.TokenType.OR);
             _keywords.Add("class", Token.TokenType.CLASS);
+            _keywords.Add("define", Token.TokenType.DEFINE);
+            _keywords.Add("member", Token.TokenType.MEMBER);
+            _keywords.Add("return", Token.TokenType.RETURN);
         }
 
         public class Token
@@ -83,9 +86,10 @@ namespace TrashML
                 
                 LEFT_PAREN, RIGHT_PAREN,
                 
-                REPEAT, REQUIRE, CLASS, IF,
-                ELSE, MACRO, DO, END, PRINT,
+                REPEAT, REQUIRE, IF, ELSE,
+                MACRO, DO, END, PRINT,
                 TO, LET, TRUE, FALSE, AND, OR,
+                CLASS, DEFINE, MEMBER, RETURN,
                 
                 NEWLINE, EOF
             }

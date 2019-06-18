@@ -16,10 +16,22 @@ namespace TrashML.ParseHelp
 
             while (!parser.Check(Lexer.Token.TokenType.END) && !parser.IsAtEnd())
             {
-                var stmt = parser.Statement();
-                if (stmt != null)
+                // we have a return statement yay
+                if (parser.Match(Lexer.Token.TokenType.RETURN))
                 {
-                    statements.Add(stmt);
+                    var stmt = parser.Return();
+                    if (stmt != null)
+                    {
+                        statements.Add(stmt);
+                    }
+                }
+                else
+                {
+                    var stmt = parser.Statement();
+                    if (stmt != null)
+                    {
+                        statements.Add(stmt);
+                    }
                 }
             }
 

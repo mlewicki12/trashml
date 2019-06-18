@@ -1,8 +1,16 @@
 
-Statement      -> BlockStmt | LetStmt   | RepeatStmt | RequireStmt |
-                 IfStmt     | MacroStmt | PrintStmt  | ComparisonExpr
+Statement      -> ClassStmt  | BlockStmt | LetStmt   | RepeatStmt | 
+                  RequireStmt | IfStmt   | MacroStmt | PrintStmt  | 
+                  ReturnStmt | ComparisonExpr
                  
+ClassStmt      -> class IDENTIFIER DefineStmt
+
 BlockStmt      -> do Statement* end
+
+DefineStmt     -> define MemberStmt* end
+
+MemberStmt     -> member IDENTIFIER BlockStmt |
+                  member IDENTIFIER (= ComparisonExpr)?
 
 LetStmt        -> let IDENTIFIER (= ComparisonExpr)?
 
@@ -16,6 +24,8 @@ IfStmt         -> if ComparisonExpr BlockStmt (else BlockStmt)?
 MacroStmt      -> macro IDENTIFIER BlockStmt
 
 PrintStmt      -> print ComparisonExpr
+
+ReturnStmt     -> return ComparisonExpr
 
 ComparisonExpr -> ConditionExpr ((and|or) ConditionExpr)*
 

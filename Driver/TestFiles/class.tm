@@ -1,5 +1,5 @@
 
-class Card
+class Card define
     member suit = 1
     member value = 5
 
