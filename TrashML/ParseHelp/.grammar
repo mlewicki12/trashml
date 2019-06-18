@@ -1,0 +1,30 @@
+
+Statement      -> BlockStmt | LetStmt   | RepeatStmt | RequireStmt |
+                 IfStmt     | MacroStmt | PrintStmt  | ComparisonExpr
+                 
+BlockStmt      -> do Statement* end
+
+LetStmt        -> let IDENTIFIER (= ComparisonExpr)?
+
+RepeatStmt     -> repeat ComparisonExpr BlockStmt |
+                  repeat ComparisonExpr (:|to) ComparisonExpr BlockStmt
+                  
+RequireStmt    -> require PrimaryValue
+
+IfStmt         -> if ComparisonExpr BlockStmt (else BlockStmt)?
+
+MacroStmt      -> macro IDENTIFIER BlockStmt
+
+PrintStmt      -> print ComparisonExpr
+
+ComparisonExpr -> ConditionExpr ((and|or) ConditionExpr)*
+
+ConditionExpr  -> AdditionExpr  ((==|!=|<|<=|>|>=) AdditionExpr)*
+
+AdditionExpr   -> MultiplyExpr  ((+|-) MultiplyExpr)*
+
+MultiplyExpr   -> UnaryExpr     ((*|/) UnaryExpr)*
+
+UnaryExpr      -> (!|-)? UnaryExpr | ( UnaryExpr ) | PrimaryExpr
+
+PrimaryExpr    -> true | false | NUMBER | IDENTIFIER | STRING

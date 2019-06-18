@@ -7,13 +7,13 @@ namespace TrashML.ParseHelp
         {
             Expr left = parser.Addition();
 
-            if (parser.Match(Lexer.Token.TokenType.EQUAL, Lexer.Token.TokenType.BANG_EQUAL,
+            while (parser.Match(Lexer.Token.TokenType.EQUAL_EQUAL, Lexer.Token.TokenType.BANG_EQUAL,
                 Lexer.Token.TokenType.LESS, Lexer.Token.TokenType.LESS_EQUAL,
                 Lexer.Token.TokenType.GREATER, Lexer.Token.TokenType.GREATER_EQUAL))
             {
                 Lexer.Token op = parser.Previous();
                 Expr right = parser.Addition();
-                return new Expr.Binary(left, op, right);
+                left = new Expr.Binary(left, op, right);
             }
 
             return left;

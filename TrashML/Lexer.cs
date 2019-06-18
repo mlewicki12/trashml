@@ -11,21 +11,21 @@ namespace TrashML
         // also a general better handling of errors lol
         public class ScanError : Exception
         {
-            public int Line;
+            private int line;
             
             public ScanError(string msg, int line) : base(msg)
             {
                 // workaround, because lines are indexed from 0
-                Line = line + 1;
+                this.line = line + 1;
             }
 
             public override string ToString()
             {
-                return $"TrashML Scan Error, line {Line}: {Message}";
+                return $"TrashML Scan Error, line {line}: {Message}";
             }
         }
 
-        private readonly Dictionary<string, Token.TokenType> Keywords;
+        private readonly Dictionary<string, Token.TokenType> _keywords;
 
         private readonly string _source;
         private int _start;
@@ -47,23 +47,23 @@ namespace TrashML
             Errors = new List<ScanError>();
 
             // add keywords
-            Keywords = new Dictionary<string, Token.TokenType>();
+            _keywords = new Dictionary<string, Token.TokenType>();
             
-            Keywords.Add("repeat", Token.TokenType.REPEAT);
-            Keywords.Add("require", Token.TokenType.REQUIRE);
-            Keywords.Add("let", Token.TokenType.LET);
-            Keywords.Add("if", Token.TokenType.IF);
-            Keywords.Add("else", Token.TokenType.ELSE);
-            Keywords.Add("macro", Token.TokenType.MACRO);
-            Keywords.Add("do", Token.TokenType.DO);
-            Keywords.Add("to", Token.TokenType.TO);
-            Keywords.Add("end", Token.TokenType.END);
-            Keywords.Add("print", Token.TokenType.PRINT);
-            Keywords.Add("false", Token.TokenType.FALSE);
-            Keywords.Add("true", Token.TokenType.TRUE);
-            Keywords.Add("and", Token.TokenType.AND);
-            Keywords.Add("or", Token.TokenType.OR);
-            Keywords.Add("class", Token.TokenType.CLASS);
+            _keywords.Add("repeat", Token.TokenType.REPEAT);
+            _keywords.Add("require", Token.TokenType.REQUIRE);
+            _keywords.Add("let", Token.TokenType.LET);
+            _keywords.Add("if", Token.TokenType.IF);
+            _keywords.Add("else", Token.TokenType.ELSE);
+            _keywords.Add("macro", Token.TokenType.MACRO);
+            _keywords.Add("do", Token.TokenType.DO);
+            _keywords.Add("to", Token.TokenType.TO);
+            _keywords.Add("end", Token.TokenType.END);
+            _keywords.Add("print", Token.TokenType.PRINT);
+            _keywords.Add("false", Token.TokenType.FALSE);
+            _keywords.Add("true", Token.TokenType.TRUE);
+            _keywords.Add("and", Token.TokenType.AND);
+            _keywords.Add("or", Token.TokenType.OR);
+            _keywords.Add("class", Token.TokenType.CLASS);
         }
 
         public class Token
@@ -73,7 +73,8 @@ namespace TrashML
                 NUMBER, IDENTIFIER, STRING,
                 
                 PLUS, MINUS, MULTIPLY, DIVIDE,
-                EQUAL, BANG, BANG_EQUAL, 
+                EQUAL, BANG, 
+                EQUAL_EQUAL, BANG_EQUAL, 
                 
                 COMMA, COLON, DOT,
                 
@@ -136,7 +137,7 @@ namespace TrashML
 
             switch (c)
             {
-                // nothing to see here, move along
+                // these are not the characters you're looking for
                 case ' ':
                 case '\r':
                 case '\t':
@@ -184,7 +185,13 @@ namespace TrashML
                     break;
 
                 case '=':
-                    addToken(Token.TokenType.EQUAL, "=");
+                    if (peek() == '=')
+                    {
+                        addToken(Token.TokenType.EQUAL_EQUAL, "==");
+                        advance();
+                    }
+                    else addToken(Token.TokenType.EQUAL, "=");
+                    
                     break;
 
                 case '<':
@@ -282,9 +289,9 @@ namespace TrashML
             }
 
             string text = _source.Substring(_start, _current - _start);
-            if (Keywords.ContainsKey(text))
+            if (_keywords.ContainsKey(text))
             {
-                addToken(Keywords[text], text);
+                addToken(_keywords[text], text);
             }
             else
             {

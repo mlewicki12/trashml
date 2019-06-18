@@ -7,7 +7,7 @@ namespace TrashML.ParseHelp
         {
             var expr = parser.Comparison();
 
-            parser.Consume("Expected new line after variable declaration", Lexer.Token.TokenType.NEWLINE,
+            parser.Consume("Expected new line after print statement", Lexer.Token.TokenType.NEWLINE,
                 Lexer.Token.TokenType.EOF);
             
             return new Stmt.Print(expr);
