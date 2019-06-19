@@ -1,4 +1,6 @@
 
+using TrashML.Main;
+
 namespace TrashML.Elements
 {
     public static class PrimaryExtension

@@ -1,24 +1,43 @@
 
 using System.Collections.Generic;
 
-namespace TrashML
+namespace TrashML.Main
 {
     public abstract class Stmt
     {
         public interface IVisitor<R>
         {
+            R VisitAssignStmt(Assign stmt);
             R VisitBlockStmt(Block stmt);
+            R VisitClassStmt(Class stmt);
             R VisitDefineStmt(Define stmt);
             R VisitExpressionStmt(Expression stmt);
-            R VisitMemberStmt(Member stmt);
-            R VisitAssignStmt(Assign stmt);
-            R VisitPrintStmt(Print stmt);
-            R VisitRepeatStmt(Repeat stmt);
-            R VisitReturnStmt(Return stmt);
-            R VisitRequireStmt(Require stmt);
             R VisitIfStmt(If stmt);
             R VisitMacroStmt(Macro stmt);
-            R VisitClassStmt(Class stmt);
+            R VisitMemberStmt(Member stmt);
+            R VisitPrintStmt(Print stmt);
+            R VisitRepeatStmt(Repeat stmt);
+            R VisitRequireStmt(Require stmt);
+            R VisitReturnStmt(Return stmt);
+        }
+
+        public abstract R Accept<R>(IVisitor<R> visitor);
+
+        public class Assign : Stmt
+        {
+            public readonly Lexer.Token Name;
+            public readonly Expr Initialiser;
+
+            public Assign(Lexer.Token name, Expr initializer)
+            {
+                Name = name;
+                Initialiser = initializer;
+            }
+
+            public override R Accept<R>(IVisitor<R> visitor)
+            {
+                return visitor.VisitAssignStmt(this);
+            }
         }
 
         public class Block : Stmt
@@ -33,6 +52,23 @@ namespace TrashML
             public override R Accept<R>(IVisitor<R> visitor)
             {
                 return visitor.VisitBlockStmt(this);
+            }
+        }
+
+        public class Class : Stmt
+        {
+            public readonly Lexer.Token Name;
+            public readonly Define Body;
+
+            public Class(Lexer.Token name, Define body)
+            {
+                Name = name;
+                Body = body;
+            }
+
+            public override R Accept<R>(IVisitor<R> visitor)
+            {
+                return visitor.VisitClassStmt(this);
             }
         }
 
@@ -66,27 +102,46 @@ namespace TrashML
             }
         }
 
-        public class Assign : Stmt
+        public class If : Stmt
         {
-            public readonly Lexer.Token Name;
-            public readonly Expr Initialiser;
+            public readonly Expr Condition;
+            public readonly Stmt WhenTrue;
+            public readonly Stmt WhenFalse;
 
-            public Assign(Lexer.Token name, Expr initializer)
+            public If(Expr cond, Stmt tr, Stmt fl)
             {
-                Name = name;
-                Initialiser = initializer;
+                Condition = cond;
+                WhenTrue = tr;
+                WhenFalse = fl;
             }
 
             public override R Accept<R>(IVisitor<R> visitor)
             {
-                return visitor.VisitAssignStmt(this);
+                return visitor.VisitIfStmt(this);
+            }
+        }
+
+        public class Macro : Stmt
+        {
+            public readonly Lexer.Token Name;
+            public readonly Block Body;
+
+            public Macro(Lexer.Token name, Block body)
+            {
+                Name = name;
+                Body = body;
+            }
+
+            public override R Accept<R>(IVisitor<R> visitor)
+            {
+                return visitor.VisitMacroStmt(this);
             }
         }
 
         public class Member : Stmt
         {
             public readonly Lexer.Token Name;
-            
+
             public readonly Expr Initialiser;
             public readonly Block Body;
 
@@ -149,6 +204,21 @@ namespace TrashML
             }
         }
 
+        public class Require : Stmt
+        {
+            public readonly Expr File;
+
+            public Require(Expr file)
+            {
+                File = file;
+            }
+
+            public override R Accept<R>(IVisitor<R> visitor)
+            {
+                return visitor.VisitRequireStmt(this);
+            }
+        }
+
         public class Return : Stmt
         {
             public readonly Expr Value;
@@ -163,76 +233,5 @@ namespace TrashML
                 return visitor.VisitReturnStmt(this);
             }
         }
-
-        public class Require : Stmt 
-        {
-            public readonly Expr File;
-
-            public Require(Expr file) 
-            {
-                File = file;
-            }
-
-            public override R Accept<R>(IVisitor<R> visitor) 
-            {
-                return visitor.VisitRequireStmt(this);
-            }
-        }
-
-        public class If : Stmt
-        {
-            public readonly Expr Condition;
-            public readonly Stmt WhenTrue;
-            public readonly Stmt WhenFalse;
-
-            public If(Expr cond, Stmt tr, Stmt fl)
-            {
-                Condition = cond;
-                WhenTrue = tr;
-                WhenFalse = fl;
-            }
-
-            public override R Accept<R>(IVisitor<R> visitor)
-            {
-                return visitor.VisitIfStmt(this);
-            }
-
-        }
-
-        public class Macro : Stmt
-        {
-            public readonly Lexer.Token Name;
-            public readonly Block Body;
-
-            public Macro(Lexer.Token name, Block body)
-            {
-                Name = name;
-                Body = body;
-            }
-
-            public override R Accept<R>(IVisitor<R> visitor)
-            {
-                return visitor.VisitMacroStmt(this);
-            }
-        }
-
-        public class Class : Stmt
-        {
-            public readonly Lexer.Token Name;
-            public readonly Define Body;
-
-            public Class(Lexer.Token name, Define body)
-            {
-                Name = name;
-                Body = body;
-            }
-
-            public override R Accept<R>(IVisitor<R> visitor)
-            {
-                return visitor.VisitClassStmt(this);
-            }
-        }
-
-        public abstract R Accept<R>(IVisitor<R> visitor);
     }
 }

@@ -1,5 +1,5 @@
 
-namespace TrashML
+namespace TrashML.Main
 {
     public abstract class Expr
     {
@@ -7,10 +7,13 @@ namespace TrashML
         {
             R VisitBinaryExpr(Binary expr);
             R VisitGroupingExpr(Grouping expr);
+            R VisitLiteralExpr(Literal expr);
+            R VisitNewExpr(New expr);
             R VisitUnaryExpr(Unary expr);
             R VisitVariableExpr(Variable expr);
-            R VisitLiteralExpr(Literal expr);
         }
+
+        public abstract R Accept<R>(IVisitor<R> visitor);
 
         public class Binary : Expr
         {
@@ -46,6 +49,36 @@ namespace TrashML
             }
         }
 
+        public class Literal : Expr
+        {
+            public readonly object Value;
+
+            public Literal(object value)
+            {
+                Value = value;
+            }
+
+            public override R Accept<R>(IVisitor<R> visitor)
+            {
+                return visitor.VisitLiteralExpr(this);
+            }
+        }
+
+        public class New : Expr
+        {
+            public readonly Lexer.Token Identifier;
+
+            public New(Lexer.Token id)
+            {
+                Identifier = id;
+            }
+
+            public override R Accept<R>(IVisitor<R> visitor)
+            {
+                return visitor.VisitNewExpr(this);
+            }
+        }
+
         public class Unary : Expr
         {
             public readonly Lexer.Token Operator;
@@ -77,22 +110,5 @@ namespace TrashML
                 return visitor.VisitVariableExpr(this);
             }
         }
-
-        public class Literal : Expr
-        {
-            public readonly object Value;
-
-            public Literal(object value)
-            {
-                Value = value;
-            }
-
-            public override R Accept<R>(IVisitor<R> visitor)
-            {
-                return visitor.VisitLiteralExpr(this);
-            }
-        }
-
-        public abstract R Accept<R>(IVisitor<R> visitor);
     }
 }

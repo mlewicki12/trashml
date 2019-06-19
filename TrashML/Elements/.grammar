@@ -27,7 +27,9 @@ PrintStmt      -> print ComparisonExpr
 
 ReturnStmt     -> return ComparisonExpr
 
-ComparisonExpr -> ConditionExpr ((and|or) ConditionExpr)*
+ComparisonExpr -> ConditionExpr ((and|or) ConditionExpr)* | NewExpr
+
+NewExpr        -> new IDENTIFIER
 
 ConditionExpr  -> AdditionExpr  ((==|!=|<|<=|>|>=) AdditionExpr)*
 

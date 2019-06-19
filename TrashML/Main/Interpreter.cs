@@ -3,10 +3,8 @@ using System;
 using System.Collections.Generic;
 using TrashML.Elements;
 
-namespace TrashML
+namespace TrashML.Main
 {
-    // might possibly extrapolate into ParseHelp as well
-    // actually I'm gonna do that later today
     public class Interpreter : Expr.IVisitor<object>,
         Stmt.IVisitor<string> // this string doesn't actually matter, but we can't use Void in C#
     {
@@ -84,6 +82,16 @@ namespace TrashML
         {
             return this.GroupingExpr(expr);
         }
+        
+        public object VisitLiteralExpr(Expr.Literal expr)
+        {
+            return expr.Value;
+        }
+
+        public object VisitNewExpr(Expr.New expr)
+        {
+            return this.NewExpr(expr);
+        }
 
         public object VisitUnaryExpr(Expr.Unary expr)
         {
@@ -95,20 +103,14 @@ namespace TrashML
             return this.VariableExpr(expr);
         }
 
-        public object VisitLiteralExpr(Expr.Literal expr)
+        public string VisitAssignStmt(Stmt.Assign stmt)
         {
-            return expr.Value;
+            return this.AssignStmt(stmt);
         }
 
         public string VisitBlockStmt(Stmt.Block stmt)
         {
             return this.BlockStmt(stmt);
-        }
-
-        public string VisitExpressionStmt(Stmt.Expression stmt)
-        {
-            Evaluate(stmt.InnerExpression);
-            return "";
         }
 
         public string VisitClassStmt(Stmt.Class stmt)
@@ -121,19 +123,25 @@ namespace TrashML
             return this.DefineStmt(stmt);
         }
 
+        public string VisitExpressionStmt(Stmt.Expression stmt)
+        {
+            Evaluate(stmt.InnerExpression);
+            return "";
+        }
+
+        public string VisitIfStmt(Stmt.If stmt)
+        {
+            return this.IfStmt(stmt);
+        }
+
+        public string VisitMacroStmt(Stmt.Macro stmt)
+        {
+            return this.MacroStmt(stmt);
+        }
+
         public string VisitMemberStmt(Stmt.Member stmt)
         {
             return this.MemberStmt(stmt);
-        }
-
-        public string VisitReturnStmt(Stmt.Return stmt)
-        {
-            return this.ReturnStmt(stmt);
-        }
-
-        public string VisitAssignStmt(Stmt.Assign stmt)
-        {
-            return this.AssignStmt(stmt);
         }
 
         public string VisitPrintStmt(Stmt.Print stmt)
@@ -151,14 +159,9 @@ namespace TrashML
             return this.RequireStmt(stmt);
         }
 
-        public string VisitIfStmt(Stmt.If stmt)
+        public string VisitReturnStmt(Stmt.Return stmt)
         {
-            return this.IfStmt(stmt);
-        }
-
-        public string VisitMacroStmt(Stmt.Macro stmt)
-        {
-            return this.MacroStmt(stmt);
+            return this.ReturnStmt(stmt);
         }
     }
 

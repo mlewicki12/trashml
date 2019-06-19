@@ -8,4 +8,5 @@ class Card define
     end
 end
 
-print Card.suit
+let card = new Card
+print card.suit

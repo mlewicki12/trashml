@@ -3,7 +3,7 @@ using System;
 using System.CodeDom;
 using System.Collections.Generic;
 
-namespace TrashML
+namespace TrashML.Main
 {
     public class Lexer
     {
@@ -67,6 +67,7 @@ namespace TrashML
             _keywords.Add("define", Token.TokenType.DEFINE);
             _keywords.Add("member", Token.TokenType.MEMBER);
             _keywords.Add("return", Token.TokenType.RETURN);
+            _keywords.Add("new", Token.TokenType.NEW);
         }
 
         public class Token
@@ -90,6 +91,7 @@ namespace TrashML
                 MACRO, DO, END, PRINT,
                 TO, LET, TRUE, FALSE, AND, OR,
                 CLASS, DEFINE, MEMBER, RETURN,
+                NEW,
                 
                 NEWLINE, EOF
             }

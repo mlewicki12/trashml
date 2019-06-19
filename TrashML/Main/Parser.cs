@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using TrashML.Elements;
 
-namespace TrashML
+namespace TrashML.Main
 {
     public class Parser
     {
         public class ParseError : Exception
         {
-            public int Line;
+            public readonly int Line;
             
             public ParseError(string msg, int line) : base(msg)
             {

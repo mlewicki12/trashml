@@ -1,5 +1,5 @@
 
-using System.Linq.Expressions;
+using TrashML.Main;
 
 namespace TrashML.Elements
 {
@@ -7,6 +7,11 @@ namespace TrashML.Elements
     {
         public static Expr Comparison(this Parser parser)
         {
+            if (parser.Match(Lexer.Token.TokenType.NEW))
+            {
+                return parser.New();
+            }
+            
             Expr left = parser.Condition();
 
             if (parser.Match(Lexer.Token.TokenType.AND, Lexer.Token.TokenType.OR))
