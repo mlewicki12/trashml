@@ -2,6 +2,7 @@
 
 using System;
 using TrashML.Main;
+using TrashML.Objects;
 
 namespace TrashML.Elements
 {
@@ -13,9 +14,9 @@ namespace TrashML.Elements
             return new Expr.New(name);
         }
 
-        public static object NewExpr(this Interpreter interpreter, Expr.New value)
+        public static TrashObject NewExpr(this Interpreter interpreter, Expr.New value)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

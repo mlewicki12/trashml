@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using TrashML.Main;
+using TrashML.Objects;
 
 namespace TrashML.Elements
 {
@@ -30,7 +31,7 @@ namespace TrashML.Elements
             return new Stmt.Member(name, initialiser);
         }
 
-        public static string MemberStmt(this Interpreter interpreter, Stmt.Member stmt)
+        public static TrashObject MemberStmt(this Interpreter interpreter, Stmt.Member stmt)
         {
             throw new NotImplementedException();
         }

@@ -60,7 +60,12 @@
     <Compile Include="Main\Lexer.cs" />
     <Compile Include="Main\Parser.cs" />
     <Compile Include="Main\Stmt.cs" />
+    <Compile Include="Objects\Class.cs" />
     <Compile Include="Objects\Environment.cs" />
+    <Compile Include="Objects\Overrides\BooleanOverrides.cs" />
+    <Compile Include="Objects\Overrides\NumberOverrides.cs" />
+    <Compile Include="Objects\Overrides\OverrideMap.cs" />
+    <Compile Include="Objects\TrashObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

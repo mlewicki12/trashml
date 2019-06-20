@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using TrashML.Main;
+using TrashML.Objects;
 
 namespace TrashML.Elements
 {
@@ -23,9 +24,9 @@ namespace TrashML.Elements
             return new Stmt.If(cond, new Stmt.Block(blk), (blk2 != null) ? new Stmt.Block(blk2) : null);
         }
 
-        public static string IfStmt(this Interpreter interpreter, Stmt.If stmt)
+        public static TrashObject IfStmt(this Interpreter interpreter, Stmt.If stmt)
         {
-            var cond = interpreter.Evaluate(stmt.Condition);
+            var cond = interpreter.Evaluate(stmt.Condition).Access();
 
             if (cond is bool)
             {
@@ -38,7 +39,7 @@ namespace TrashML.Elements
                     interpreter.Execute(stmt.WhenFalse);
                 }
 
-                return "";
+                return null;
             }
 
             throw new Interpreter.RuntimeError("If statement condition not a boolean value");

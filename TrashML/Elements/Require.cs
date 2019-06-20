@@ -1,6 +1,7 @@
 
 using System.IO;
 using TrashML.Main;
+using TrashML.Objects;
 
 namespace TrashML.Elements
 {
@@ -11,9 +12,9 @@ namespace TrashML.Elements
             return new Stmt.Require(parser.Primary());
         }
 
-        public static string RequireStmt(this Interpreter interpreter, Stmt.Require stmt)
+        public static TrashObject RequireStmt(this Interpreter interpreter, Stmt.Require stmt)
         {
-            var val = interpreter.Evaluate(stmt.File);
+            var val = interpreter.Evaluate(stmt.File).Access();
 
             if (val is string) {
                 var lines = readFile(val as string);
@@ -41,7 +42,7 @@ namespace TrashML.Elements
                         break;
                     }
 
-                    return "completed"; // kill the loop if we didn't hit any errors
+                    return null; // kill the loop if we didn't hit any errors
                 }
                 
                 throw new Interpreter.RuntimeError($"Error parsing provided file {val}");

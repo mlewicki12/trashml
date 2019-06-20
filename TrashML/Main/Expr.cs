@@ -1,4 +1,6 @@
 
+using TrashML.Objects;
+
 namespace TrashML.Main
 {
     public abstract class Expr
@@ -51,9 +53,9 @@ namespace TrashML.Main
 
         public class Literal : Expr
         {
-            public readonly object Value;
+            public readonly TrashObject Value;
 
-            public Literal(object value)
+            public Literal(TrashObject value)
             {
                 Value = value;
             }

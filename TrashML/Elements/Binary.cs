@@ -1,5 +1,7 @@
 
 using TrashML.Main;
+using TrashML.Objects;
+using TrashML.Objects.Overrides;
 
 namespace TrashML.Elements
 {
@@ -82,60 +84,12 @@ namespace TrashML.Elements
             return expr;
         }
         
-        public static object BinaryExpr(this Interpreter interpreter, Expr.Binary expr)
+        public static TrashObject BinaryExpr(this Interpreter interpreter, Expr.Binary expr)
         {
             var left = interpreter.Evaluate(expr.Left);
             var right = interpreter.Evaluate(expr.Right);
 
-            if (left is int && right is int)
-            {
-                switch (expr.Operator.Type)
-                {
-                    case Lexer.Token.TokenType.PLUS:
-                        return (int) left + (int) right;
-
-                    case Lexer.Token.TokenType.MINUS:
-                        return (int) left - (int) right;
-
-                    case Lexer.Token.TokenType.MULTIPLY:
-                        return (int) left * (int) right;
-
-                    case Lexer.Token.TokenType.DIVIDE:
-                        return (int) left / (int) right;
-
-                    case Lexer.Token.TokenType.EQUAL:
-                        return (int) left == (int) right;
-
-                    case Lexer.Token.TokenType.BANG_EQUAL:
-                        return (int) left != (int) right;
-
-                    case Lexer.Token.TokenType.LESS:
-                        return (int) left < (int) right;
-
-                    case Lexer.Token.TokenType.LESS_EQUAL:
-                        return (int) left <= (int) right;
-
-                    case Lexer.Token.TokenType.GREATER:
-                        return (int) left > (int) right;
-
-                    case Lexer.Token.TokenType.GREATER_EQUAL:
-                        return (int) left >= (int) right;
-                }
-            }
-
-            if (left is bool && right is bool)
-            {
-                switch (expr.Operator.Type)
-                {
-                    case Lexer.Token.TokenType.AND:
-                        return (bool) left && (bool) right;
-                    
-                    case Lexer.Token.TokenType.OR:
-                        return (bool) left || (bool) right;
-                }
-            }
-
-            throw new Interpreter.RuntimeError($"Unknown operator '{expr.Operator.Literal}'");
+            return interpreter.RunOverride(expr.Operator, left, right);
         }
     }
 }

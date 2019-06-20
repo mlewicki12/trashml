@@ -1,5 +1,7 @@
 
 using TrashML.Main;
+using TrashML.Objects;
+using TrashML.Objects.Overrides;
 
 namespace TrashML.Elements
 {
@@ -13,27 +15,10 @@ namespace TrashML.Elements
             return parser.Dotted();
         }
         
-        public static object UnaryExpr(this Interpreter interpreter, Expr.Unary expr)
+        public static TrashObject UnaryExpr(this Interpreter interpreter, Expr.Unary expr)
         {
             var right = interpreter.Evaluate(expr.Right);
-
-            if (right is int)
-            {
-                if (expr.Operator.Type == Lexer.Token.TokenType.MINUS)
-                {
-                    return -1 * (int) right;
-                }
-
-            }
-            else if (right is bool)
-            {
-                if (expr.Operator.Type == Lexer.Token.TokenType.BANG)
-                {
-                    return !((bool) right);
-                }
-            }
-
-            throw new Interpreter.RuntimeError($"Wrong type give for {expr.Operator.Literal} operator");
+            return interpreter.RunOverride(expr.Operator, right);
         }
     }
 }

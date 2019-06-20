@@ -1,6 +1,7 @@
 
 using System;
 using TrashML.Main;
+using TrashML.Objects;
 
 namespace TrashML.Elements
 {
@@ -16,9 +17,23 @@ namespace TrashML.Elements
             return new Stmt.Class(id, new Stmt.Define(parser.Define()));
         }
 
-        public static string ClassStmt(this Interpreter interpreter, Stmt.Class stmt)
+        public static TrashObject ClassStmt(this Interpreter interpreter, Stmt.Class stmt)
         {
-            throw new NotImplementedException();
+            var cls = new Class(stmt.Name);
+            foreach (var def in stmt.Body.Statements)
+            {
+                if (def.Body is null)
+                {
+                    cls.Add(def.Name, interpreter.Evaluate(def.Initialiser));
+                }
+                else
+                {
+                    cls.Add(def.Name, new TrashObject(new Stmt.Macro(def.Name, def.Body)));
+                }
+            }
+            
+            interpreter.IntEnvironment.Define(stmt.Name, new TrashObject(cls));
+            return null;
         }
     }
 }

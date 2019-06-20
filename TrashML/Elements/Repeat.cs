@@ -1,5 +1,6 @@
 
 using TrashML.Main;
+using TrashML.Objects;
 
 namespace TrashML.Elements
 {
@@ -31,13 +32,13 @@ namespace TrashML.Elements
             return new Stmt.Repeat(left, blk);
         }
 
-        public static string RepeatStmt(this Interpreter interpreter, Stmt.Repeat stmt)
+        public static TrashObject RepeatStmt(this Interpreter interpreter, Stmt.Repeat stmt)
         {
             // we've got ourselves a low-high expression bois
             if (stmt.LowValue != null)
             {
-                var low = interpreter.Evaluate(stmt.LowValue);
-                var high = interpreter.Evaluate(stmt.HighValue);
+                var low = interpreter.Evaluate(stmt.LowValue).Access();
+                var high = interpreter.Evaluate(stmt.HighValue).Access();
                 if (low is int && high is int)
                 {
                     for (int i = (int) low; i <= (int) high; ++i)
@@ -45,23 +46,23 @@ namespace TrashML.Elements
                         interpreter.Execute(stmt.Block);
                     }
 
-                    return "";
+                    return null;
                 }
 
                 throw new Interpreter.RuntimeError("Invalid values for repeat loop");
             }
             
             // otherwise this guy's got a condition
-            var cond = interpreter.Evaluate(stmt.Condition);
+            var cond = interpreter.Evaluate(stmt.Condition).Access();
             if (cond is bool)
             {
-                while ((bool) interpreter.Evaluate(stmt.Condition))
+                while ((bool) interpreter.Evaluate(stmt.Condition).Access())
                 {
                     interpreter.Execute(stmt.Block);
                 }
             }
 
-            return "";
+            return null;
         }
     }
 }

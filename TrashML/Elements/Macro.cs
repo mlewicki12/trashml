@@ -1,5 +1,6 @@
 
 using TrashML.Main;
+using TrashML.Objects;
 
 namespace TrashML.Elements
 {
@@ -15,10 +16,10 @@ namespace TrashML.Elements
             return new Stmt.Macro(id, new Stmt.Block(parser.Block()));
         }
 
-        public static string MacroStmt(this Interpreter interpreter, Stmt.Macro stmt)
+        public static TrashObject MacroStmt(this Interpreter interpreter, Stmt.Macro stmt)
         {
-            interpreter.IntEnvironment.Define(stmt.Name, stmt);
-            return "";
+            interpreter.IntEnvironment.Define(stmt.Name, new TrashObject(stmt));
+            return null;
         }
     }
 }

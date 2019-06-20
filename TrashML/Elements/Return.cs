@@ -1,6 +1,7 @@
 
 using System;
 using TrashML.Main;
+using TrashML.Objects;
 
 namespace TrashML.Elements
 {
@@ -12,9 +13,9 @@ namespace TrashML.Elements
             return new Stmt.Return(value);
         }
 
-        public static string ReturnStmt(this Interpreter interpreter, Stmt.Return stmt)
+        public static TrashObject ReturnStmt(this Interpreter interpreter, Stmt.Return stmt)
         {
-            throw new NotImplementedException();
+            return interpreter.Evaluate(stmt.Value);
         }
     }
 }

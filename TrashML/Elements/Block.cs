@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using TrashML.Main;
+using TrashML.Objects;
 
 namespace TrashML.Elements
 {
@@ -46,11 +47,9 @@ namespace TrashML.Elements
             return statements;
         }
 
-        public static string BlockStmt(this Interpreter interpreter, Stmt.Block stmt)
+        public static TrashObject BlockStmt(this Interpreter interpreter, Stmt.Block stmt)
         {
-            // implement returns at some point pls
-            interpreter.ExecuteBlock(stmt.Statements, new Environment(interpreter.IntEnvironment.Name + " Block", interpreter.IntEnvironment));
-            return "";
+            return interpreter.ExecuteBlock(stmt.Statements, new Environment(interpreter.IntEnvironment.Name + " Block", interpreter.IntEnvironment));
         }
     }
 }

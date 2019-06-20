@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 using TrashML.Elements;
+using TrashML.Objects;
+using TrashML.Objects.Overrides;
 
 namespace TrashML.Main
 {
-    public class Interpreter : Expr.IVisitor<object>,
-        Stmt.IVisitor<string> // this string doesn't actually matter, but we can't use Void in C#
+    public class Interpreter : Expr.IVisitor<TrashObject>,
+        Stmt.IVisitor<TrashObject> // this string doesn't actually matter, but we can't use Void in C#
     {
         public class RuntimeError : Exception
         {
@@ -22,6 +24,9 @@ namespace TrashML.Main
         {
             IntEnvironment = new Environment("TML Interpreter", null);
             Errors = new List<RuntimeError>();
+
+            NumberOverrides.AddOverrides();
+            BooleanOverrides.AddOverrides();
         }
 
         public void Interpret(List<Stmt> statements)
@@ -44,17 +49,17 @@ namespace TrashML.Main
             return Errors.Count != 0;
         }
 
-        public object Evaluate(Expr expr)
+        public TrashObject Evaluate(Expr expr)
         {
             return expr.Accept(this);
         }
 
-        public void Execute(Stmt stmt)
+        public TrashObject Execute(Stmt stmt)
         {
-            stmt.Accept(this);
+            return stmt.Accept(this);
         }
 
-        public void ExecuteBlock(List<Stmt> statements, Environment env)
+        public TrashObject ExecuteBlock(List<Stmt> statements, Environment env)
         {
             Environment previous = IntEnvironment;
 
@@ -64,102 +69,109 @@ namespace TrashML.Main
 
                 foreach (var statement in statements)
                 {
-                    Execute(statement);
+                    var value = Execute(statement);
+                    if (value != null) // we must've hit a return
+                    {
+                        IntEnvironment = previous;
+                        return value;
+                    }
                 }
             }
             finally
             {
                 IntEnvironment = previous;
             }
+
+            return null;
         }
 
-        public object VisitBinaryExpr(Expr.Binary expr)
+        public TrashObject VisitBinaryExpr(Expr.Binary expr)
         {
             return this.BinaryExpr(expr);
         }
 
-        public object VisitGroupingExpr(Expr.Grouping expr)
+        public TrashObject VisitGroupingExpr(Expr.Grouping expr)
         {
             return this.GroupingExpr(expr);
         }
         
-        public object VisitLiteralExpr(Expr.Literal expr)
+        public TrashObject VisitLiteralExpr(Expr.Literal expr)
         {
             return expr.Value;
         }
 
-        public object VisitNewExpr(Expr.New expr)
+        public TrashObject VisitNewExpr(Expr.New expr)
         {
             return this.NewExpr(expr);
         }
 
-        public object VisitUnaryExpr(Expr.Unary expr)
+        public TrashObject VisitUnaryExpr(Expr.Unary expr)
         {
             return this.UnaryExpr(expr);
         }
 
-        public object VisitVariableExpr(Expr.Variable expr)
+        public TrashObject VisitVariableExpr(Expr.Variable expr)
         {
             return this.VariableExpr(expr);
         }
 
-        public string VisitAssignStmt(Stmt.Assign stmt)
+        public TrashObject VisitAssignStmt(Stmt.Assign stmt)
         {
             return this.AssignStmt(stmt);
         }
 
-        public string VisitBlockStmt(Stmt.Block stmt)
+        public TrashObject VisitBlockStmt(Stmt.Block stmt)
         {
             return this.BlockStmt(stmt);
         }
 
-        public string VisitClassStmt(Stmt.Class stmt)
+        public TrashObject VisitClassStmt(Stmt.Class stmt)
         {
             return this.ClassStmt(stmt);
         }
 
-        public string VisitDefineStmt(Stmt.Define stmt)
+        public TrashObject VisitDefineStmt(Stmt.Define stmt)
         {
             return this.DefineStmt(stmt);
         }
 
-        public string VisitExpressionStmt(Stmt.Expression stmt)
+        public TrashObject VisitExpressionStmt(Stmt.Expression stmt)
         {
             Evaluate(stmt.InnerExpression);
-            return "";
+            return null;
         }
 
-        public string VisitIfStmt(Stmt.If stmt)
+        public TrashObject VisitIfStmt(Stmt.If stmt)
         {
             return this.IfStmt(stmt);
         }
 
-        public string VisitMacroStmt(Stmt.Macro stmt)
+        public TrashObject VisitMacroStmt(Stmt.Macro stmt)
         {
             return this.MacroStmt(stmt);
         }
 
-        public string VisitMemberStmt(Stmt.Member stmt)
+        public TrashObject VisitMemberStmt(Stmt.Member stmt)
         {
             return this.MemberStmt(stmt);
         }
 
-        public string VisitPrintStmt(Stmt.Print stmt)
+        public TrashObject VisitPrintStmt(Stmt.Print stmt)
         {
             return this.PrintStmt(stmt);
         }
 
-        public string VisitRepeatStmt(Stmt.Repeat stmt)
+        public TrashObject VisitRepeatStmt(Stmt.Repeat stmt)
         {
             return this.RepeatStmt(stmt);
         }
 
-        public string VisitRequireStmt(Stmt.Require stmt)
+        public TrashObject VisitRequireStmt(Stmt.Require stmt)
         {
             return this.RequireStmt(stmt);
         }
 
-        public string VisitReturnStmt(Stmt.Return stmt)
+        public TrashObject VisitReturnStmt(Stmt.Return stmt)
         {
             return this.ReturnStmt(stmt);
         }

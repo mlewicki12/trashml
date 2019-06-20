@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using TrashML.Main;
+using TrashML.Objects;
 
 namespace TrashML.Elements
 {
@@ -38,7 +39,7 @@ namespace TrashML.Elements
             return statements;
         }
 
-        public static string DefineStmt(this Interpreter interpreter, Stmt.Define stmt)
+        public static TrashObject DefineStmt(this Interpreter interpreter, Stmt.Define stmt)
         {
             throw new NotImplementedException();
         }

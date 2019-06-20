@@ -1,5 +1,6 @@
 
 using TrashML.Main;
+using TrashML.Objects;
 
 namespace TrashML.Elements
 {
@@ -18,7 +19,7 @@ namespace TrashML.Elements
             return parser.Primary();
         }
 
-        public static object GroupingExpr(this Interpreter interpreter, Expr.Grouping expr)
+        public static TrashObject GroupingExpr(this Interpreter interpreter, Expr.Grouping expr)
         {
             return interpreter.Evaluate(expr.Expression);
         }

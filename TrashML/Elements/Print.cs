@@ -1,6 +1,7 @@
 
 using System;
 using TrashML.Main;
+using TrashML.Objects;
 
 namespace TrashML.Elements
 {
@@ -16,12 +17,12 @@ namespace TrashML.Elements
             return new Stmt.Print(expr);
         }
 
-        public static string PrintStmt(this Interpreter interpreter, Stmt.Print stmt)
+        public static TrashObject PrintStmt(this Interpreter interpreter, Stmt.Print stmt)
         {
-            object value = interpreter.Evaluate(stmt.Expression);
-            Console.WriteLine(value);
+            var value = interpreter.Evaluate(stmt.Expression);
+            Console.WriteLine(value.Access());
 
-            return "";
+            return null;
         }
     }
 }

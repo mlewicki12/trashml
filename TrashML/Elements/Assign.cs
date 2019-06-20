@@ -1,5 +1,6 @@
 
 using TrashML.Main;
+using TrashML.Objects;
 
 namespace TrashML.Elements
 {
@@ -20,12 +21,12 @@ namespace TrashML.Elements
             return new Stmt.Assign(name, initialiser);
         }
 
-        public static string AssignStmt(this Interpreter interpreter, Stmt.Assign stmt)
+        public static TrashObject AssignStmt(this Interpreter interpreter, Stmt.Assign stmt)
         {
-            object value = interpreter.Evaluate(stmt.Initialiser);
+            var value = interpreter.Evaluate(stmt.Initialiser);
 
             interpreter.IntEnvironment.Define(stmt.Name, value);
-            return "";
+            return null;
         }
     }
 }
