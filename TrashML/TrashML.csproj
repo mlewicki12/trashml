@@ -65,6 +65,7 @@
     <Compile Include="Objects\Overrides\BooleanOverrides.cs" />
     <Compile Include="Objects\Overrides\NumberOverrides.cs" />
     <Compile Include="Objects\Overrides\OverrideMap.cs" />
+    <Compile Include="Objects\Overrides\StringOverrides.cs" />
     <Compile Include="Objects\TrashObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

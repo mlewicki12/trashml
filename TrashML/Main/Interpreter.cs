@@ -27,6 +27,7 @@ namespace TrashML.Main
 
             NumberOverrides.AddOverrides();
             BooleanOverrides.AddOverrides();
+            StringOverrides.AddOverrides();
         }
 
         public void Interpret(List<Stmt> statements)

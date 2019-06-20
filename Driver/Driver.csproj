@@ -54,6 +54,7 @@
     <Content Include="TestFiles\macros.tm" />
     <Content Include="TestFiles\macros_args.tm" />
     <Content Include="TestFiles\require.tm" />
+    <Content Include="TestFiles\strings.tm" />
     <Content Include="TestFiles\test.tm" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
