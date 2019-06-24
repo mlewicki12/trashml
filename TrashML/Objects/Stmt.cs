@@ -144,8 +144,6 @@ namespace TrashML.Objects
             public readonly Block Body;
             public readonly Comma Arguments;
 
-            public Macro(Lexer.Token name, Block body) : this(name, body, null) {}
-
             public Macro(Lexer.Token name, Block body, Comma args)
             {
                 Name = name;

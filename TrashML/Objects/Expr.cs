@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using TrashML.Main;
 
 namespace TrashML.Objects
@@ -7,6 +8,7 @@ namespace TrashML.Objects
     {
         public interface IVisitor<R>
         {
+            R VisitArgExpr(Arg expr);
             R VisitBinaryExpr(Binary expr);
             R VisitGroupingExpr(Grouping expr);
             R VisitLiteralExpr(Literal expr);
@@ -17,6 +19,21 @@ namespace TrashML.Objects
 
         public abstract R Accept<R>(IVisitor<R> visitor);
 
+        public class Arg : Expr
+        {
+            public readonly List<Stmt.Assign> Values;
+
+            public Arg(List<Stmt.Assign> args)
+            {
+                Values = args;
+            }
+
+            public override R Accept<R>(IVisitor<R> visitor)
+            {
+                return visitor.VisitArgExpr(this);
+            }
+        }
+        
         public class Binary : Expr
         {
             public readonly Expr Left;
@@ -101,10 +118,12 @@ namespace TrashML.Objects
         public class Variable : Expr
         {
             public readonly Lexer.Token Name;
+            public readonly Expr.Arg Arguments;
 
-            public Variable(Lexer.Token name)
+            public Variable(Lexer.Token name, Expr.Arg args)
             {
                 Name = name;
+                Arguments = args;
             }
 
             public override R Accept<R>(IVisitor<R> visitor)

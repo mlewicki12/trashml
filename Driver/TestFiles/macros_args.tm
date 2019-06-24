@@ -1,5 +1,5 @@
 
-macro max with one, two do
+macro max do
     if one < two do
         print two
     else
@@ -7,4 +7,4 @@ macro max with one, two do
     end
 end
 
-test with one = 4, two = 5
+max with one = 4, two = 5

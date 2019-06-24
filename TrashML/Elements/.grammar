@@ -45,4 +45,6 @@ DottedExpr     -> Grouping(.Grouping)*
 
 Grouping       -> ( ComparisonExpr ) | PrimaryExpr
 
-PrimaryExpr    -> true | false | NUMBER | IDENTIFIER | STRING
+PrimaryExpr    -> true | false | NUMBER | IDENTIFIER (with ArgExpr)? | STRING
+
+ArgExpr        -> IDENTIFIER = PrimaryExpr (, IDENTIFIER = PrimaryExpr)*

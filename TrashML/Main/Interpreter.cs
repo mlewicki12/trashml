@@ -86,6 +86,11 @@ namespace TrashML.Main
             return null;
         }
 
+        public TrashObject VisitArgExpr(Expr.Arg expr)
+        {
+            return this.ArgExpr(expr);
+        }
+
         public TrashObject VisitBinaryExpr(Expr.Binary expr)
         {
             return this.BinaryExpr(expr);

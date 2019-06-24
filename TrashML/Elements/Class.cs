@@ -28,7 +28,10 @@ namespace TrashML.Elements
                 }
                 else
                 {
-                    cls.Add(def.Name, new TrashObject(new Stmt.Macro(def.Name, def.Body)));
+                    // this is an error, because I didn't have it read args on a define stmt yet
+                    // keeping it here so that I remember
+                    cls.Add(def.Name, new TrashObject(new Stmt.Macro(def.Name, def.Body, null)));
+                    throw new NotImplementedException();
                 }
             }
             
