@@ -14,14 +14,14 @@ namespace TrashML.Elements
 
             parser.Consume("Expected 'do' after 'if'", Lexer.Token.TokenType.DO);
             var blk = parser.Block();
-            List<Stmt> blk2 = null;
+            Stmt.Block blk2 = null;
 
             if (parser.Match(Lexer.Token.TokenType.ELSE))
             {
                 blk2 = parser.Block();
             }
 
-            return new Stmt.If(cond, new Stmt.Block(blk), (blk2 != null) ? new Stmt.Block(blk2) : null);
+            return new Stmt.If(cond, blk, blk2);
         }
 
         public static TrashObject IfStmt(this Interpreter interpreter, Stmt.If stmt)

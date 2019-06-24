@@ -21,7 +21,7 @@ namespace TrashML.Elements
             }
 
             Stmt.Block blk = null;
-            if (parser.Match(Lexer.Token.TokenType.DO)) blk = new Stmt.Block(parser.Block());
+            if (parser.Match(Lexer.Token.TokenType.DO)) blk = parser.Block();
             else throw new Parser.ParseError("Expected block after repeat statement", line);
 
             if (right != null)

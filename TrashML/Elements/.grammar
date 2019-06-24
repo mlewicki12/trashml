@@ -21,7 +21,9 @@ RequireStmt    -> require PrimaryValue
 
 IfStmt         -> if ComparisonExpr BlockStmt
 
-MacroStmt      -> macro IDENTIFIER BlockStmt
+MacroStmt      -> macro IDENTIFIER (with CommaStmt)? BlockStmt
+
+CommaStmt      -> IDENTIFIER (, IDENTIFIER)*
 
 PrintStmt      -> print ComparisonExpr
 

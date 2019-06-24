@@ -38,6 +38,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Elements\Comma.cs" />
     <Compile Include="Elements\New.cs" />
     <Compile Include="Elements\Assign.cs" />
     <Compile Include="Elements\Block.cs" />
@@ -55,17 +56,17 @@
     <Compile Include="Elements\Return.cs" />
     <Compile Include="Elements\Statement.cs" />
     <Compile Include="Elements\Unary.cs" />
-    <Compile Include="Main\Expr.cs" />
     <Compile Include="Main\Interpreter.cs" />
     <Compile Include="Main\Lexer.cs" />
     <Compile Include="Main\Parser.cs" />
-    <Compile Include="Main\Stmt.cs" />
     <Compile Include="Objects\Class.cs" />
     <Compile Include="Objects\Environment.cs" />
+    <Compile Include="Objects\Expr.cs" />
     <Compile Include="Objects\Overrides\BooleanOverrides.cs" />
     <Compile Include="Objects\Overrides\NumberOverrides.cs" />
     <Compile Include="Objects\Overrides\OverrideMap.cs" />
     <Compile Include="Objects\Overrides\StringOverrides.cs" />
+    <Compile Include="Objects\Stmt.cs" />
     <Compile Include="Objects\TrashObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

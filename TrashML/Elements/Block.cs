@@ -7,7 +7,7 @@ namespace TrashML.Elements
 {
     public static class BlockExtension
     {
-        public static List<Stmt> Block(this Parser parser)
+        public static Stmt.Block Block(this Parser parser)
         {
             // should get rid of pesky newlines
             while (parser.Match(Lexer.Token.TokenType.NEWLINE))
@@ -40,11 +40,11 @@ namespace TrashML.Elements
             // I don't want it to eat the else
             if (parser.Check(Lexer.Token.TokenType.ELSE))
             {
-                return statements;
+                return new Stmt.Block(statements);
             }
             
             parser.Consume("Expected 'end' after 'do'", Lexer.Token.TokenType.END);
-            return statements;
+            return new Stmt.Block(statements);
         }
 
         public static TrashObject BlockStmt(this Interpreter interpreter, Stmt.Block stmt)

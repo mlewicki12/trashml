@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TrashML.Elements;
+using TrashML.Objects;
 
 namespace TrashML.Main
 {
@@ -49,7 +50,7 @@ namespace TrashML.Main
 
             while (!IsAtEnd())
             {
-                Stmt stmt = this.Statement();
+                var stmt = this.Statement();
                 if (stmt != null)
                 {
                     statements.Add(stmt);

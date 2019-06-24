@@ -1,5 +1,6 @@
 
 using TrashML.Main;
+using TrashML.Objects;
 
 namespace TrashML.Elements
 {
@@ -10,7 +11,7 @@ namespace TrashML.Elements
             try
             {
                 if (parser.Match(Lexer.Token.TokenType.CLASS)) return parser.Class();
-                if (parser.Match(Lexer.Token.TokenType.DO)) return new Stmt.Block(parser.Block());
+                if (parser.Match(Lexer.Token.TokenType.DO)) return parser.Block();
                 if (parser.Match(Lexer.Token.TokenType.LET)) return parser.Assign();
                 if (parser.Match(Lexer.Token.TokenType.REPEAT)) return parser.Repeat();
                 if (parser.Match(Lexer.Token.TokenType.REQUIRE)) return parser.Require();

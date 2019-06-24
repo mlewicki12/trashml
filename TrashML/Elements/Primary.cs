@@ -13,6 +13,9 @@ namespace TrashML.Elements
 
             if (parser.Match(Lexer.Token.TokenType.NUMBER)) return new Expr.Literal(new TrashObject(int.Parse(parser.Previous().Literal)));
             if (parser.Match(Lexer.Token.TokenType.IDENTIFIER)) return new Expr.Variable(parser.Previous());
+            // This is gonna error out, but I'm keeping a reminder here
+            // Need to figure out how to work it in with Expr and Stmt
+            if (parser.Match(Lexer.Token.TokenType.WITH)) return parser.Comma();
             if (parser.Match( Lexer.Token.TokenType.STRING)) return new Expr.Literal(new TrashObject(parser.Previous().Literal));
 
             throw new Parser.ParseError("Expecting expression", parser.Previous().Line);

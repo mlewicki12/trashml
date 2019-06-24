@@ -1,7 +1,7 @@
 
-using TrashML.Objects;
+using TrashML.Main;
 
-namespace TrashML.Main
+namespace TrashML.Objects
 {
     public abstract class Expr
     {

@@ -131,6 +131,11 @@ namespace TrashML.Main
             return this.ClassStmt(stmt);
         }
 
+        public TrashObject VisitCommaStmt(Stmt.Comma stmt)
+        {
+            return this.CommaStmt(stmt);
+        }
+
         public TrashObject VisitDefineStmt(Stmt.Define stmt)
         {
             return this.DefineStmt(stmt);

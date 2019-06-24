@@ -68,6 +68,7 @@ namespace TrashML.Main
             _keywords.Add("member", Token.TokenType.MEMBER);
             _keywords.Add("return", Token.TokenType.RETURN);
             _keywords.Add("new", Token.TokenType.NEW);
+            _keywords.Add("with", Token.TokenType.WITH);
         }
 
         public class Token
@@ -91,7 +92,7 @@ namespace TrashML.Main
                 MACRO, DO, END, PRINT,
                 TO, LET, TRUE, FALSE, AND, OR,
                 CLASS, DEFINE, MEMBER, RETURN,
-                NEW,
+                NEW, WITH,
                 
                 NEWLINE, EOF
             }

@@ -1,7 +1,8 @@
 
 using System.Collections.Generic;
+using TrashML.Main;
 
-namespace TrashML.Main
+namespace TrashML.Objects
 {
     public abstract class Stmt
     {
@@ -10,6 +11,7 @@ namespace TrashML.Main
             R VisitAssignStmt(Assign stmt);
             R VisitBlockStmt(Block stmt);
             R VisitClassStmt(Class stmt);
+            R VisitCommaStmt(Comma stmt);
             R VisitDefineStmt(Define stmt);
             R VisitExpressionStmt(Expression stmt);
             R VisitIfStmt(If stmt);
@@ -72,6 +74,21 @@ namespace TrashML.Main
             }
         }
 
+        public class Comma : Stmt
+        {
+            public readonly List<Lexer.Token> Identifiers;
+
+            public Comma(List<Lexer.Token> ids)
+            {
+                Identifiers = ids;
+            }
+
+            public override R Accept<R>(IVisitor<R> visitor)
+            {
+                return visitor.VisitCommaStmt(this);
+            }
+        }
+
         public class Define : Stmt
         {
             public readonly List<Member> Statements;
@@ -125,11 +142,19 @@ namespace TrashML.Main
         {
             public readonly Lexer.Token Name;
             public readonly Block Body;
+            public readonly Comma Arguments;
 
-            public Macro(Lexer.Token name, Block body)
+            public Macro(Lexer.Token name, Block body) : this(name, body, null) {}
+
+            public Macro(Lexer.Token name, Block body, Comma args)
             {
                 Name = name;
                 Body = body;
+                
+                if (args != null)
+                {
+                    Arguments = args;
+                }
             }
 
             public override R Accept<R>(IVisitor<R> visitor)

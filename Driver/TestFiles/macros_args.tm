@@ -1,10 +1,10 @@
 
-macro test with num do
-    if num < 5 do
-        print num
+macro max with one, two do
+    if one < two do
+        print two
     else
-        print 5
+        print one
     end
 end
 
-test with num = 7
+test with one = 4, two = 5

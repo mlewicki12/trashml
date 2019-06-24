@@ -8,6 +8,7 @@ namespace TrashML.Driver
 {
     internal class Program
     {
+        // should probably abstract this to TrashML.ReadFile or something
         public static void Main(string[] args)
         {
             string text;

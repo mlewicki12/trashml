@@ -13,7 +13,7 @@ namespace TrashML.Elements
             Lexer.Token name = parser.Consume("Expected identifier after 'member'", Lexer.Token.TokenType.IDENTIFIER);
 
             Expr initialiser = null;
-            List<Stmt> block = null;
+            Stmt.Block block = null;
             if (parser.Match(Lexer.Token.TokenType.EQUAL))
             {
                 initialiser = parser.Comparison();
@@ -25,7 +25,7 @@ namespace TrashML.Elements
             // if there is a block, it's a method
             if (block != null)
             {
-                return new Stmt.Member(name, new Stmt.Block(block));
+                return new Stmt.Member(name, block);
             }
             
             return new Stmt.Member(name, initialiser);
