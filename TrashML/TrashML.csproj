@@ -63,6 +63,7 @@
     <Compile Include="Objects\Environment.cs" />
     <Compile Include="Objects\Expr.cs" />
     <Compile Include="Objects\Overrides\BooleanOverrides.cs" />
+    <Compile Include="Objects\Overrides\ClassOverrides.cs" />
     <Compile Include="Objects\Overrides\NumberOverrides.cs" />
     <Compile Include="Objects\Overrides\OverrideMap.cs" />
     <Compile Include="Objects\Overrides\StringOverrides.cs" />

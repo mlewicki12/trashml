@@ -43,7 +43,12 @@ namespace TrashML.Elements
 
             if (env == null)
             {
-                throw new Interpreter.RuntimeError($"Trying to access non-existing variable {expr.Name.Literal}");
+                // this is an interesting issue
+                // since the dot operator is treated as a binary operator, this happens when trying to access stuff
+                // so for now, I might treat identifiers as strings and see if I can get classes working
+                //throw new Interpreter.RuntimeError($"Trying to access non-existing variable {expr.Name.Literal}");
+                
+                return new TrashObject(expr.Name);
             }
 
             var value = env.Get(expr.Name).Access();

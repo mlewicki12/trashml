@@ -8,6 +8,7 @@ namespace TrashML.Objects
     {
         public readonly string Name;
         private readonly Dictionary<string, TrashObject> _elements = new Dictionary<string, TrashObject>();
+        private readonly List<Lexer.Token> _keys = new List<Lexer.Token>();
 
         public Class(Lexer.Token name)
         {
@@ -21,8 +22,20 @@ namespace TrashML.Objects
 
         public Class Add(Lexer.Token name, TrashObject body)
         {
-            _elements.Add(name.Literal, body);
+            if (!Exists(name))
+            {
+                _keys.Add(name);
+                _elements.Add(name.Literal, body);
+            }
+            else _elements[name.Literal] = body;
+            
+            
             return this;
+        }
+
+        public List<Lexer.Token> Keys()
+        {
+            return _keys;
         }
 
         public TrashObject Get(Lexer.Token name)
@@ -41,18 +54,6 @@ namespace TrashML.Objects
             // but y'know, I'll test that at some point
             // TODO: redo stuff
             return new TrashObject(this);
-        }
-
-        // determine an override based on types
-        // this would be a great idea to introduce polymorphism, but I'm lazy
-        public TrashObject BinaryOperation(Lexer.Token op, TrashObject other)
-        {
-            return null;
-        }
-
-        public TrashObject UnaryOperator(Lexer.Token op)
-        {
-            return null;
         }
     }
 }

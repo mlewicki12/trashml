@@ -12,7 +12,7 @@ namespace TrashML.Elements
             parser.Consume("Expected identifier after class definition", Lexer.Token.TokenType.IDENTIFIER);
             var id = parser.Previous();
 
-            parser.Consume("Expected block after class identifier", Lexer.Token.TokenType.DEFINE);
+            parser.Consume("Expected 'define' block after class identifier", Lexer.Token.TokenType.DEFINE);
 
             return new Stmt.Class(id, new Stmt.Define(parser.Define()));
         }
@@ -24,18 +24,18 @@ namespace TrashML.Elements
             {
                 if (def.Body is null)
                 {
-                    cls.Add(def.Name, interpreter.Evaluate(def.Initialiser));
+                    if (def.Initialiser is null)
+                    {
+                        cls.Add(def.Name, null);
+                    } else cls.Add(def.Name, interpreter.Evaluate(def.Initialiser));
                 }
                 else
                 {
-                    // this is an error, because I didn't have it read args on a define stmt yet
-                    // keeping it here so that I remember
-                    cls.Add(def.Name, new TrashObject(new Stmt.Macro(def.Name, def.Body, null)));
-                    throw new NotImplementedException();
+                    cls.Add(def.Name, new TrashObject(new Stmt.Macro(def.Name, def.Body, def.Arguments)));
                 }
             }
             
-            interpreter.IntEnvironment.Define(stmt.Name, new TrashObject(cls));
+            interpreter.IntEnvironment.Define(stmt.Name, cls);
             return null;
         }
     }

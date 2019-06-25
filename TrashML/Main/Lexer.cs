@@ -55,6 +55,7 @@ namespace TrashML.Main
             _keywords.Add("if", Token.TokenType.IF);
             _keywords.Add("else", Token.TokenType.ELSE);
             _keywords.Add("macro", Token.TokenType.MACRO);
+            _keywords.Add("function", Token.TokenType.MACRO);
             _keywords.Add("do", Token.TokenType.DO);
             _keywords.Add("to", Token.TokenType.TO);
             _keywords.Add("end", Token.TokenType.END);

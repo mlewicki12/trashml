@@ -148,11 +148,7 @@ namespace TrashML.Objects
             {
                 Name = name;
                 Body = body;
-                
-                if (args != null)
-                {
-                    Arguments = args;
-                }
+                Arguments = args;
             }
 
             public override R Accept<R>(IVisitor<R> visitor)
@@ -166,7 +162,9 @@ namespace TrashML.Objects
             public readonly Lexer.Token Name;
 
             public readonly Expr Initialiser;
+            
             public readonly Block Body;
+            public readonly Comma Arguments;
 
             public Member(Lexer.Token name, Expr initializer)
             {
@@ -174,10 +172,11 @@ namespace TrashML.Objects
                 Initialiser = initializer;
             }
 
-            public Member(Lexer.Token name, Block body)
+            public Member(Lexer.Token name, Block body, Comma args)
             {
                 Name = name;
                 Body = body;
+                Arguments = args;
             }
 
             public override R Accept<R>(IVisitor<R> visitor)

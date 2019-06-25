@@ -18,8 +18,7 @@ namespace TrashML.Elements
 
             // this fucks up when doing with statements
             // shouldn't be needed, but that's a testing thing
-//            parser.Consume("Expected new line after variable declaration", Lexer.Token.TokenType.NEWLINE,
-//                Lexer.Token.TokenType.EOF);
+            // parser.Consume("Expected new line after variable declaration", Lexer.Token.TokenType.NEWLINE, Lexer.Token.TokenType.EOF);
             return new Stmt.Assign(name, initialiser);
         }
 

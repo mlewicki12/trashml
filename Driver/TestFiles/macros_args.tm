@@ -1,5 +1,5 @@
 
-macro max do
+function max with one, two do
     if one < two do
         print two
     else

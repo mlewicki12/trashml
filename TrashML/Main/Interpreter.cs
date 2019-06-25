@@ -17,6 +17,8 @@ namespace TrashML.Main
             }
         }
 
+        // I should be more consistent with how I do things
+        // but I'm saving that for a full rewrite
         public Environment IntEnvironment;
         public List<RuntimeError> Errors;
 
@@ -28,6 +30,7 @@ namespace TrashML.Main
             NumberOverrides.AddOverrides();
             BooleanOverrides.AddOverrides();
             StringOverrides.AddOverrides();
+            ClassOverrides.AddOverrides();
         }
 
         public void Interpret(List<Stmt> statements)

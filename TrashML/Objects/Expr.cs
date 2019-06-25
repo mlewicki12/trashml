@@ -86,10 +86,12 @@ namespace TrashML.Objects
         public class New : Expr
         {
             public readonly Lexer.Token Identifier;
+            public readonly Arg Arguments;
 
-            public New(Lexer.Token id)
+            public New(Lexer.Token id, Arg args = null)
             {
                 Identifier = id;
+                Arguments = args;
             }
 
             public override R Accept<R>(IVisitor<R> visitor)
